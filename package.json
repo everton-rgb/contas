@@ -1,0 +1,11 @@
+{
+  "name": "vence",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "node --experimental-strip-types packages/core/src/boleto.test.ts"
+  }
+}

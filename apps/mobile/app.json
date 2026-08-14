@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "Vence",
+    "slug": "vence",
+    "scheme": "vence",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.vence.app",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "O Vence usa a câmera para ler o código de barras do boleto."
+      }
+    },
+    "android": {
+      "package": "com.vence.app",
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-background-task",
+      [
+        "expo-notifications",
+        {
+          "color": "#17414F"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#E5E9E6",
+          "dark": {
+            "backgroundColor": "#0E1214"
+          },
+          "resizeMode": "contain"
+        }
+      ]
+    ]
+  }
+}

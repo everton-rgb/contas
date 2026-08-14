@@ -9,3 +9,7 @@ android/
 .env.*
 !.env.example
 .DS_Store
+
+# Expo
+apps/mobile/.expo/
+apps/mobile/dist/

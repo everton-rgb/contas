@@ -1,0 +1,14 @@
+{
+  "name": "@vence/core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lógica pura de boletos. Sem React Native, sem Node — roda no device e na Edge Function.",
+  "main": "./src/boleto.ts",
+  "types": "./src/boleto.ts",
+  "exports": {
+    ".": "./src/boleto.ts"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types src/boleto.test.ts"
+  }
+}

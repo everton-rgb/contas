@@ -1,0 +1,1661 @@
+<title>Vence</title>
+<style>
+  :root {
+    --papel: #E5E9E6;
+    --carta: #FBFCFB;
+    --app: #EFF2F0;
+    --tinta: #131819;
+    --tinta-2: #596164;
+    --tinta-3: #7C8487;
+    --linha: #C7CEC9;
+    --linha-suave: #DCE2DD;
+    --carimbo: #17414F;
+    --carimbo-tinta: #FBFCFB;
+    --vencido: #9E2B20;
+    --hoje: #8A5D00;
+    --ok: #2E6B41;
+    --vencido-fundo: #F6E4E1;
+    --hoje-fundo: #F6EDDA;
+    --ok-fundo: #E2EFE5;
+    --sombra: 0 1px 2px rgba(19, 24, 25, .06), 0 12px 32px rgba(19, 24, 25, .08);
+    --sombra-tel: 0 2px 6px rgba(19, 24, 25, .08), 0 30px 70px rgba(19, 24, 25, .16);
+    --barra: #131819;
+
+    --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --papel: #0E1214;
+      --carta: #171C1E;
+      --app: #12171A;
+      --tinta: #E6EBE9;
+      --tinta-2: #98A2A3;
+      --tinta-3: #798385;
+      --linha: #2B3336;
+      --linha-suave: #222A2D;
+      --carimbo: #83C6D6;
+      --carimbo-tinta: #0E1214;
+      --vencido: #E9917F;
+      --hoje: #DDB45F;
+      --ok: #83C795;
+      --vencido-fundo: #33201D;
+      --hoje-fundo: #302819;
+      --ok-fundo: #1B2C21;
+      --sombra: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 32px rgba(0, 0, 0, .34);
+      --sombra-tel: 0 2px 6px rgba(0, 0, 0, .5), 0 30px 70px rgba(0, 0, 0, .5);
+      --barra: #E6EBE9;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --papel: #0E1214;
+    --carta: #171C1E;
+    --app: #12171A;
+    --tinta: #E6EBE9;
+    --tinta-2: #98A2A3;
+    --tinta-3: #798385;
+    --linha: #2B3336;
+    --linha-suave: #222A2D;
+    --carimbo: #83C6D6;
+    --carimbo-tinta: #0E1214;
+    --vencido: #E9917F;
+    --hoje: #DDB45F;
+    --ok: #83C795;
+    --vencido-fundo: #33201D;
+    --hoje-fundo: #302819;
+    --ok-fundo: #1B2C21;
+    --sombra: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 32px rgba(0, 0, 0, .34);
+    --sombra-tel: 0 2px 6px rgba(0, 0, 0, .5), 0 30px 70px rgba(0, 0, 0, .5);
+    --barra: #E6EBE9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: var(--ui);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .envoltorio {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 24px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  /* ── Cabeçalho ─────────────────────────────────────────────── */
+
+  .cabecalho { display: flex; flex-direction: column; gap: 14px; max-width: 68ch; }
+
+  .selo {
+    font: 600 11px/1 var(--ui);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--tinta-3);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .selo::after {
+    content: ""; flex: 1; height: 1px; background: var(--linha); min-width: 40px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(30px, 4.4vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -.028em;
+    font-weight: 640;
+    text-wrap: balance;
+  }
+  h1 .fino { color: var(--tinta-3); font-weight: 400; }
+
+  .deck { margin: 0; color: var(--tinta-2); font-size: 16.5px; max-width: 64ch; }
+
+  .avisoprot {
+    display: flex; gap: 12px; align-items: flex-start;
+    border: 1px solid var(--linha);
+    border-left: 3px solid var(--carimbo);
+    background: var(--carta);
+    padding: 13px 16px;
+    font-size: 13.5px;
+    color: var(--tinta-2);
+    max-width: 74ch;
+  }
+  .avisoprot strong { color: var(--tinta); font-weight: 600; }
+
+  /* ── Palco ─────────────────────────────────────────────────── */
+
+  .palco {
+    display: grid;
+    grid-template-columns: 372px minmax(0, 1fr);
+    gap: 44px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .palco { grid-template-columns: minmax(0, 1fr); gap: 34px; justify-items: center; }
+    .inspetor { width: 100%; }
+  }
+
+  /* ── Telefone ──────────────────────────────────────────────── */
+
+  .telefone {
+    width: 372px;
+    padding: 11px;
+    border-radius: 46px;
+    background: var(--carta);
+    border: 1px solid var(--linha);
+    box-shadow: var(--sombra-tel);
+    position: sticky; top: 28px;
+  }
+  @media (max-width: 900px) { .telefone { position: static; } }
+
+  .tela {
+    border-radius: 36px;
+    overflow: hidden;
+    background: var(--app);
+    height: 734px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid var(--linha-suave);
+  }
+
+  .statusbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 13px 26px 5px;
+    font: 600 12.5px/1 var(--ui);
+    letter-spacing: .01em;
+    color: var(--tinta);
+    flex: none;
+  }
+  .statusbar .sinais { display: flex; gap: 4px; align-items: center; }
+  .sinais i { width: 3px; border-radius: 1px; background: var(--barra); display: block; }
+  .sinais i:nth-child(1) { height: 5px; } .sinais i:nth-child(2) { height: 7px; }
+  .sinais i:nth-child(3) { height: 9px; } .sinais i:nth-child(4) { height: 11px; }
+  .bateria { width: 22px; height: 11px; border: 1.3px solid var(--tinta); border-radius: 3px; padding: 1.3px; margin-left: 4px; }
+  .bateria span { display: block; height: 100%; width: 72%; background: var(--tinta); border-radius: 1px; }
+
+  .topo {
+    padding: 6px 22px 12px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    flex: none;
+  }
+  .topo h2 {
+    margin: 0; font-size: 23px; letter-spacing: -.02em; font-weight: 640;
+  }
+  .topo .acao {
+    background: none; border: none; padding: 0;
+    font: 500 14px/1 var(--ui); color: var(--carimbo); cursor: pointer;
+  }
+  .topo .acao:hover { text-decoration: underline; }
+
+  .corpo {
+    flex: 1; overflow-y: auto; padding: 0 18px 18px;
+    display: flex; flex-direction: column; gap: 12px;
+    scrollbar-width: thin;
+  }
+
+  .abas {
+    flex: none;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--linha-suave);
+    background: var(--carta);
+    padding: 8px 6px 20px;
+  }
+  .aba {
+    background: none; border: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 5px 0;
+    font: 500 10.5px/1 var(--ui); letter-spacing: .02em;
+    color: var(--tinta-3);
+  }
+  .aba svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+  .aba[aria-selected="true"] { color: var(--carimbo); }
+  .aba:focus-visible { outline: 2px solid var(--carimbo); outline-offset: 2px; border-radius: 6px; }
+
+  /* ── Peças reutilizáveis ───────────────────────────────────── */
+
+  .cartao {
+    background: var(--carta);
+    border: 1px solid var(--linha-suave);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  .rotulo {
+    font: 600 10px/1 var(--ui);
+    letter-spacing: .13em; text-transform: uppercase;
+    color: var(--tinta-3);
+  }
+
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 999px;
+    font: 600 11px/1.5 var(--ui); letter-spacing: .01em;
+    white-space: nowrap;
+  }
+  .pill.vencido { background: var(--vencido-fundo); color: var(--vencido); }
+  .pill.hoje    { background: var(--hoje-fundo);    color: var(--hoje); }
+  .pill.ok      { background: var(--ok-fundo);      color: var(--ok); }
+  .pill.rascunho { background: var(--linha-suave); color: var(--tinta-2); }
+
+  .ponto { width: 7px; height: 7px; border-radius: 999px; background: currentColor; flex: none; }
+
+  button.primario {
+    appearance: none; border: none; cursor: pointer;
+    background: var(--carimbo); color: var(--carimbo-tinta);
+    font: 600 15px/1 var(--ui); letter-spacing: -.005em;
+    padding: 15px 18px; border-radius: 12px;
+    width: 100%;
+    transition: opacity .14s ease;
+  }
+  button.primario:hover:not(:disabled) { opacity: .88; }
+  button.primario:disabled { opacity: .38; cursor: not-allowed; }
+  button.primario:focus-visible { outline: 2px solid var(--carimbo); outline-offset: 3px; }
+
+  button.secundario {
+    appearance: none; cursor: pointer;
+    background: none; border: 1px solid var(--linha);
+    color: var(--tinta); font: 500 13.5px/1 var(--ui);
+    padding: 9px 13px; border-radius: 9px;
+  }
+  button.secundario:hover { border-color: var(--carimbo); color: var(--carimbo); }
+  button.secundario:focus-visible { outline: 2px solid var(--carimbo); outline-offset: 2px; }
+
+  input[type="text"], input[type="date"], textarea, select {
+    width: 100%; font-family: var(--ui); font-size: 15px; color: var(--tinta);
+    background: var(--carta);
+    border: 1px solid var(--linha);
+    border-radius: 10px; padding: 11px 12px;
+  }
+  textarea.linha-entrada { font-family: var(--mono); font-size: 13px; line-height: 1.6; resize: vertical; min-height: 76px; letter-spacing: .01em; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--carimbo); outline-offset: 1px; border-color: transparent; }
+
+  .campo { display: flex; flex-direction: column; gap: 6px; }
+  .campo.pendente { position: relative; padding-left: 11px; }
+  .campo.pendente::before {
+    content: ""; position: absolute; left: 0; top: 2px; bottom: 2px;
+    width: 3px; border-radius: 2px; background: var(--hoje);
+  }
+  .campo .dica { font-size: 11.5px; color: var(--hoje); }
+
+  /* ── Inspetor ──────────────────────────────────────────────── */
+
+  .inspetor { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+
+  .bloco {
+    background: var(--carta);
+    border: 1px solid var(--linha-suave);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+  }
+  .bloco > header {
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--linha-suave);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .bloco > header h3 { margin: 0; font-size: 13.5px; font-weight: 640; letter-spacing: -.006em; }
+  .bloco > header .nota { font-size: 11.5px; color: var(--tinta-3); }
+  .bloco .conteudo { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+
+  .kv { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 7px 16px; font-size: 13px; }
+  .kv dt { color: var(--tinta-3); font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; font-weight: 600; padding-top: 2px; }
+  .kv dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; word-break: break-all; }
+  .kv dd.nulo { color: var(--tinta-3); font-style: italic; font-family: var(--ui); }
+
+  .barcode-caixa { display: flex; flex-direction: column; gap: 7px; }
+  canvas.barcode { width: 100%; height: 62px; display: block; }
+  .barcode-caixa .legenda { font-size: 11px; color: var(--tinta-3); }
+
+  .avisos { display: flex; flex-direction: column; gap: 7px; margin: 0; padding: 0; list-style: none; }
+  .avisos li {
+    font-size: 12px; line-height: 1.45;
+    padding: 7px 10px; border-radius: 8px;
+    background: var(--hoje-fundo); color: var(--hoje);
+    display: flex; gap: 8px;
+  }
+
+  .metricas { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 1px; background: var(--linha-suave); }
+  .metrica { background: var(--carta); padding: 13px 16px; display: flex; flex-direction: column; gap: 3px; }
+  .metrica .num { font: 640 25px/1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .metrica .cap { font-size: 11px; color: var(--tinta-3); letter-spacing: .03em; }
+  .metrica.estourou .num { color: var(--vencido); }
+
+  .medidor { height: 6px; border-radius: 3px; background: var(--linha-suave); overflow: hidden; display: flex; }
+  .medidor i { display: block; height: 100%; background: var(--carimbo); }
+  .medidor i.excedente { background: var(--vencido); }
+
+  table.fila { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.fila th {
+    text-align: left; font: 600 10px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase;
+    color: var(--tinta-3); padding: 0 10px 8px 0; border-bottom: 1px solid var(--linha-suave);
+  }
+  table.fila td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--linha-suave); vertical-align: top; }
+  table.fila tr:last-child td { border-bottom: none; }
+  table.fila td.quando { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--tinta-2); }
+  table.fila td.fora { color: var(--tinta-3); }
+  .rolagem { overflow-x: auto; }
+
+  .amostras { display: flex; flex-wrap: wrap; gap: 7px; }
+  .amostra {
+    appearance: none; cursor: pointer;
+    border: 1px solid var(--linha); background: var(--carta); color: var(--tinta-2);
+    border-radius: 999px; padding: 6px 11px;
+    font: 500 12px/1.3 var(--ui);
+    text-align: left;
+  }
+  .amostra:hover { border-color: var(--carimbo); color: var(--carimbo); }
+  .amostra:focus-visible { outline: 2px solid var(--carimbo); outline-offset: 2px; }
+
+  .cats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cat {
+    appearance: none; cursor: pointer;
+    border: 1px solid var(--linha); background: var(--carta);
+    border-radius: 999px; padding: 5px 11px 5px 8px;
+    font: 500 12.5px/1.3 var(--ui); color: var(--tinta-2);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cat .bolinha { width: 8px; height: 8px; border-radius: 999px; flex: none; }
+  .cat[aria-pressed="true"] { border-color: var(--tinta); color: var(--tinta); font-weight: 600; }
+  .cat:focus-visible { outline: 2px solid var(--carimbo); outline-offset: 2px; }
+
+  /* ── Lista de contas ───────────────────────────────────────── */
+
+  .grupo-rot {
+    font: 600 10px/1 var(--ui); letter-spacing: .13em; text-transform: uppercase;
+    color: var(--tinta-3); padding: 6px 2px 0;
+  }
+
+  .conta {
+    appearance: none; text-align: left; width: 100%; cursor: pointer;
+    background: var(--carta); border: 1px solid var(--linha-suave);
+    border-radius: 13px; padding: 12px 13px;
+    display: grid; grid-template-columns: 3px minmax(0, 1fr) auto; gap: 0 11px; align-items: center;
+    font-family: var(--ui);
+  }
+  .conta:hover { border-color: var(--linha); }
+  .conta:focus-visible { outline: 2px solid var(--carimbo); outline-offset: 2px; }
+  .conta .risco { width: 3px; height: 30px; border-radius: 2px; background: var(--linha); }
+  .conta.e-vencido .risco { background: var(--vencido); }
+  .conta.e-hoje .risco { background: var(--hoje); }
+  .conta.e-ok .risco { background: var(--ok); }
+  .conta.e-rascunho .risco { background: var(--tinta-3); }
+  .conta .nome { font-size: 14.5px; font-weight: 560; letter-spacing: -.008em; }
+  .conta .sub {
+    font-size: 11.5px; color: var(--tinta-3);
+    display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .conta .dir { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .conta .val { font: 600 14.5px/1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .conta .val.aconfirmar { font-size: 11.5px; font-weight: 500; color: var(--tinta-3); font-family: var(--ui); }
+
+  .vazio { text-align: center; color: var(--tinta-3); font-size: 13px; padding: 30px 20px; }
+
+  /* ── Torradeira ────────────────────────────────────────────── */
+
+  .toast {
+    position: absolute; left: 16px; right: 16px; bottom: 96px;
+    background: var(--tinta); color: var(--papel);
+    border-radius: 11px; padding: 11px 14px;
+    font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; gap: 9px;
+    box-shadow: var(--sombra);
+    opacity: 0; transform: translateY(7px);
+    transition: opacity .2s ease, transform .2s ease;
+    pointer-events: none;
+  }
+  .toast.visivel { opacity: 1; transform: translateY(0); }
+  .toast .mono { font-size: 11.5px; opacity: .72; }
+
+  .erro-caixa {
+    border: 1px solid var(--vencido); background: var(--vencido-fundo);
+    color: var(--vencido); border-radius: 11px; padding: 11px 13px;
+    font-size: 12.5px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .erro-caixa .cod { font: 600 10px/1 var(--mono); letter-spacing: .1em; opacity: .8; }
+
+  .clipboard {
+    border: 1px dashed var(--carimbo);
+    background: var(--carta);
+    border-radius: 13px; padding: 12px 13px;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .clipboard .titulo { font-size: 13.5px; font-weight: 600; }
+  .clipboard .linha { font: 12px/1.5 var(--mono); color: var(--tinta-2); word-break: break-all; }
+  .clipboard .botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+  .clipboard .botoes button { white-space: nowrap; }
+
+  .rodape {
+    border-top: 1px solid var(--linha);
+    padding-top: 20px;
+    display: flex; flex-wrap: wrap; gap: 10px 26px;
+    font-size: 12.5px; color: var(--tinta-3);
+  }
+  .rodape code { font-family: var(--mono); font-size: 11.5px; color: var(--tinta-2); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="envoltorio">
+
+  <header class="cabecalho">
+    <div class="selo">Prévia interativa · Fase 1</div>
+    <h1>Vence <span class="fino">— lê, organiza e avisa</span></h1>
+    <p class="deck">
+      Protótipo navegável do fluxo de captura. O parser rodando aqui é o
+      <code>packages/core/src/boleto.ts</code> do repositório, transpilado sem alteração de lógica —
+      os mesmos 30 testes, o mesmo tratamento da virada do fator de 2025.
+      Cole uma linha digitável ou escolha uma amostra.
+    </p>
+    <div class="avisoprot">
+      <span>
+        <strong>É protótipo, não o app.</strong>
+        Câmera, Supabase e notificações do iOS estão simulados — a captura por VisionCamera exige dev build,
+        e os alertas são locais no device. O que é real aqui: o parser, os DVs, as pendências,
+        as duas constraints do banco e a matemática da fila de 64 notificações.
+      </span>
+    </div>
+  </header>
+
+  <div class="palco">
+
+    <!-- ── Telefone ────────────────────────────────────────── -->
+    <div class="telefone">
+      <div class="tela">
+        <div class="statusbar">
+          <span id="relogio" class="mono">8:00</span>
+          <span class="sinais">
+            <i></i><i></i><i></i><i></i>
+            <span class="bateria"><span></span></span>
+          </span>
+        </div>
+
+        <div class="topo">
+          <h2 id="tela-titulo">Próximos vencimentos</h2>
+          <button class="acao" id="acao-topo" type="button" hidden></button>
+        </div>
+
+        <div class="corpo" id="corpo"></div>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <div class="abas" role="tablist">
+          <button class="aba" role="tab" data-tela="vencimentos" aria-selected="true" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+            Vencimentos
+          </button>
+          <button class="aba" role="tab" data-tela="capturar" aria-selected="false" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2"/><path d="M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>
+            Capturar
+          </button>
+          <button class="aba" role="tab" data-tela="resumo" aria-selected="false" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+            Resumo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Inspetor ────────────────────────────────────────── -->
+    <div class="inspetor">
+
+      <section class="bloco">
+        <header>
+          <h3>Saída do parser</h3>
+          <span class="nota" id="parser-nota">nenhuma leitura ainda</span>
+        </header>
+        <div class="conteudo" id="parser-saida">
+          <p class="vazio">Cole uma linha digitável na aba <strong>Capturar</strong> para ver o retorno de <code>parseBoleto()</code>.</p>
+        </div>
+      </section>
+
+      <section class="bloco">
+        <header>
+          <h3>Fila de alertas locais</h3>
+          <span class="nota">espelha <code>sincronizarAlertas()</code></span>
+        </header>
+        <div class="metricas" id="metricas"></div>
+        <div class="conteudo">
+          <div class="medidor" id="medidor" aria-hidden="true"></div>
+          <p class="nota" id="fila-nota" style="margin:0;font-size:12px;color:var(--tinta-2)"></p>
+          <div class="rolagem">
+            <table class="fila">
+              <thead>
+                <tr><th>Disparo</th><th>Alerta</th><th>Estado</th></tr>
+              </thead>
+              <tbody id="fila-corpo"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloco">
+        <header>
+          <h3>Regras do banco em ação</h3>
+          <span class="nota">0001_init.sql</span>
+        </header>
+        <div class="conteudo">
+          <dl class="kv" id="regras"></dl>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer class="rodape">
+    <span><code>packages/core/src/boleto.ts</code> — 30/30 testes</span>
+    <span><code>apps/mobile/src/lib/notificacoes.ts</code> — cota 56 de 64</span>
+    <span><code>supabase/migrations/0001_init.sql</code> — RLS + 2 constraints</span>
+  </footer>
+</div>
+
+<script type="module">
+const BASE_FATOR_ANTIGA = Date.UTC(1997, 9, 7);
+const BASE_FATOR_NOVA = Date.UTC(2022, 4, 29);
+const DIA_MS = 864e5;
+const ANOS_PASSADO = 5;
+const ANOS_FUTURO = 15;
+function mod10(bloco) {
+  let soma = 0;
+  let peso = 2;
+  for (let i = bloco.length - 1; i >= 0; i--) {
+    let produto = Number(bloco[i]) * peso;
+    if (produto > 9) produto = Math.floor(produto / 10) + produto % 10;
+    soma += produto;
+    peso = peso === 2 ? 1 : 2;
+  }
+  return (10 - soma % 10) % 10;
+}
+function mod11Barras(bloco43) {
+  let soma = 0;
+  let peso = 2;
+  for (let i = bloco43.length - 1; i >= 0; i--) {
+    soma += Number(bloco43[i]) * peso;
+    peso = peso === 9 ? 2 : peso + 1;
+  }
+  const resto = soma % 11;
+  const dv = 11 - resto;
+  return dv === 0 || dv === 10 || dv === 11 ? 1 : dv;
+}
+function mod11Arrecadacao(bloco) {
+  let soma = 0;
+  let peso = 2;
+  for (let i = bloco.length - 1; i >= 0; i--) {
+    soma += Number(bloco[i]) * peso;
+    peso = peso === 9 ? 2 : peso + 1;
+  }
+  const dv = 11 - soma % 11;
+  return dv === 10 || dv === 11 ? 0 : dv;
+}
+function isoDe(ms) {
+  return new Date(ms).toISOString().slice(0, 10);
+}
+function fatorParaData(fator, hoje = /* @__PURE__ */ new Date()) {
+  if (fator === 0) return null;
+  const agora = Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate());
+  const limiteInferior = agora - ANOS_PASSADO * 365.25 * DIA_MS;
+  const limiteSuperior = agora + ANOS_FUTURO * 365.25 * DIA_MS;
+  const candidatos = [
+    BASE_FATOR_NOVA + fator * DIA_MS,
+    BASE_FATOR_ANTIGA + fator * DIA_MS
+  ];
+  const plausiveis = candidatos.filter((c) => c >= limiteInferior && c <= limiteSuperior);
+  if (plausiveis.length === 1) return isoDe(plausiveis[0]);
+  if (plausiveis.length > 1) {
+    plausiveis.sort((a, b) => Math.abs(a - agora) - Math.abs(b - agora));
+    return isoDe(plausiveis[0]);
+  }
+  return isoDe(Math.max(...candidatos));
+}
+const BANCOS = {
+  "001": "Banco do Brasil",
+  "033": "Santander",
+  "070": "BRB",
+  "077": "Inter",
+  "104": "Caixa Econ\xF4mica Federal",
+  "212": "Banco Original",
+  "237": "Bradesco",
+  "260": "Nubank",
+  "336": "C6 Bank",
+  "341": "Ita\xFA",
+  "380": "PicPay",
+  "422": "Safra",
+  "655": "Votorantim",
+  "745": "Citibank",
+  "748": "Sicredi",
+  "756": "Sicoob"
+};
+const SEGMENTOS = {
+  1: { nome: "Prefeituras", categoria: "impostos" },
+  2: { nome: "Saneamento", categoria: "utilidades" },
+  3: { nome: "Energia el\xE9trica e g\xE1s", categoria: "utilidades" },
+  4: { nome: "Telecomunica\xE7\xF5es", categoria: "telecom" },
+  5: { nome: "\xD3rg\xE3os governamentais", categoria: "impostos" },
+  6: { nome: "Carn\xEAs e assemelhados", categoria: "outros" },
+  7: { nome: "Multas de tr\xE2nsito", categoria: "veiculo" },
+  9: { nome: "Uso exclusivo do banco", categoria: "outros" }
+};
+function normalizar(entrada) {
+  return (entrada ?? "").replace(/\D/g, "");
+}
+function parseBoleto(entrada, hoje = /* @__PURE__ */ new Date()) {
+  const bruto = (entrada ?? "").trim();
+  if (!bruto) return { ok: false, codigo: "VAZIO", erro: "Entrada vazia." };
+  const d = normalizar(bruto);
+  if (d.length === 47) return parseBancarioLinha(d, hoje);
+  if (d.length === 48) return parseArrecadacaoLinha(d, hoje);
+  if (d.length === 44) {
+    return d[0] === "8" ? parseArrecadacaoLinha(barrasParaLinhaArrecadacao(d), hoje) : parseBancarioLinha(barrasParaLinhaBancario(d), hoje);
+  }
+  return {
+    ok: false,
+    codigo: "TAMANHO_INVALIDO",
+    erro: `Esperado 44, 47 ou 48 d\xEDgitos; recebido ${d.length}.`
+  };
+}
+function extrairDeTexto(texto, hoje = /* @__PURE__ */ new Date()) {
+  const candidatos = /* @__PURE__ */ new Set();
+  const re = /(?:\d[\s.\-]?){43,60}\d/g;
+  for (const m of texto.matchAll(re)) {
+    const d = normalizar(m[0]);
+    for (const tam of [48, 47, 44]) {
+      for (let i = 0; i + tam <= d.length; i++) {
+        const fatia = d.slice(i, i + tam);
+        const r = parseBoleto(fatia, hoje);
+        if (r.ok) candidatos.add(fatia);
+      }
+    }
+  }
+  return [...candidatos].map((c) => parseBoleto(c, hoje)).filter((r) => r.ok);
+}
+function linhaParaBarrasBancario(ld) {
+  return ld.slice(0, 4) + // banco + moeda
+  ld[32] + // DV geral
+  ld.slice(33, 47) + // fator + valor
+  ld.slice(4, 9) + // campo livre 1
+  ld.slice(10, 20) + // campo livre 2
+  ld.slice(21, 31);
+}
+function barrasParaLinhaBancario(cb) {
+  const banco = cb.slice(0, 4);
+  const dvGeral = cb[4];
+  const fatorValor = cb.slice(5, 19);
+  const livre = cb.slice(19, 44);
+  const c1 = banco + livre.slice(0, 5);
+  const c2 = livre.slice(5, 15);
+  const c3 = livre.slice(15, 25);
+  return c1 + mod10(c1) + c2 + mod10(c2) + c3 + mod10(c3) + dvGeral + fatorValor;
+}
+function parseBancarioLinha(ld, hoje) {
+  if (!/^\d{47}$/.test(ld)) {
+    return { ok: false, codigo: "CARACTERE_INVALIDO", erro: "Linha digit\xE1vel inv\xE1lida." };
+  }
+  const campos = [
+    [ld.slice(0, 9), ld[9]],
+    [ld.slice(10, 20), ld[20]],
+    [ld.slice(21, 31), ld[31]]
+  ];
+  for (let i = 0; i < campos.length; i++) {
+    const [bloco, dv] = campos[i];
+    if (mod10(bloco) !== Number(dv)) {
+      return {
+        ok: false,
+        codigo: "DV_CAMPO_INVALIDO",
+        erro: `DV do campo ${i + 1} n\xE3o confere (esperado ${mod10(bloco)}, lido ${dv}). Prov\xE1vel erro de leitura.`
+      };
+    }
+  }
+  const cb = linhaParaBarrasBancario(ld);
+  const dvGeralEsperado = mod11Barras(cb.slice(0, 4) + cb.slice(5));
+  if (dvGeralEsperado !== Number(cb[4])) {
+    return {
+      ok: false,
+      codigo: "DV_GERAL_INVALIDO",
+      erro: `DV geral n\xE3o confere (esperado ${dvGeralEsperado}, lido ${cb[4]}).`
+    };
+  }
+  const fator = Number(cb.slice(5, 9));
+  const centavos = Number(cb.slice(9, 19));
+  const avisos = [];
+  const vencimento = fatorParaData(fator, hoje);
+  if (fator === 0) avisos.push("Boleto sem fator de vencimento (contra apresenta\xE7\xE3o).");
+  if (centavos === 0) avisos.push("Boleto sem valor definido no c\xF3digo.");
+  const codigoBanco = cb.slice(0, 3);
+  return {
+    ok: true,
+    tipo: "bancario",
+    linhaDigitavel: ld,
+    codigoBarras: cb,
+    valor: centavos === 0 ? null : centavos / 100,
+    vencimento,
+    codigoBanco,
+    nomeBanco: BANCOS[codigoBanco] ?? null,
+    segmento: null,
+    nomeSegmento: null,
+    categoriaSugerida: null,
+    pendencias: { vencimento: vencimento === null, valor: centavos === 0 },
+    avisos
+  };
+}
+function modoDV(identificadorValor) {
+  return identificadorValor === 6 || identificadorValor === 7 ? "mod10" : "mod11";
+}
+function linhaParaBarrasArrecadacao(ld) {
+  return ld.slice(0, 11) + ld.slice(12, 23) + ld.slice(24, 35) + ld.slice(36, 47);
+}
+function barrasParaLinhaArrecadacao(cb) {
+  const modo = modoDV(Number(cb[2]));
+  const dv = modo === "mod10" ? mod10 : mod11Arrecadacao;
+  let ld = "";
+  for (let i = 0; i < 4; i++) {
+    const bloco = cb.slice(i * 11, i * 11 + 11);
+    ld += bloco + dv(bloco);
+  }
+  return ld;
+}
+function parseArrecadacaoLinha(ld, hoje) {
+  if (!/^\d{48}$/.test(ld)) {
+    return { ok: false, codigo: "CARACTERE_INVALIDO", erro: "Linha digit\xE1vel inv\xE1lida." };
+  }
+  const cb = linhaParaBarrasArrecadacao(ld);
+  if (cb[0] !== "8") {
+    return {
+      ok: false,
+      codigo: "CARACTERE_INVALIDO",
+      erro: "Boleto de arrecada\xE7\xE3o deve iniciar com 8."
+    };
+  }
+  const identificador = Number(cb[2]);
+  const modo = modoDV(identificador);
+  const calcularDV = modo === "mod10" ? mod10 : mod11Arrecadacao;
+  for (let i = 0; i < 4; i++) {
+    const bloco = ld.slice(i * 12, i * 12 + 11);
+    const dvLido = Number(ld[i * 12 + 11]);
+    const dvCalc = calcularDV(bloco);
+    if (dvCalc !== dvLido) {
+      const tolerado = modo === "mod11" && dvCalc === 0 && dvLido === 1;
+      if (!tolerado) {
+        return {
+          ok: false,
+          codigo: "DV_BLOCO_INVALIDO",
+          erro: `DV do bloco ${i + 1} n\xE3o confere (esperado ${dvCalc}, lido ${dvLido}).`
+        };
+      }
+    }
+  }
+  const valorRaw = Number(cb.slice(4, 15));
+  const valorEfetivo = identificador === 6 || identificador === 8;
+  const segmento = Number(cb[1]);
+  const avisos = [
+    "Boleto de arrecada\xE7\xE3o n\xE3o carrega data de vencimento no c\xF3digo \u2014 confirme a data impressa."
+  ];
+  if (!valorEfetivo) {
+    avisos.push('Campo de valor \xE9 "quantidade de moeda", n\xE3o valor em reais. Confirme manualmente.');
+  }
+  if (valorRaw === 0) avisos.push("Valor zerado no c\xF3digo (boleto com valor em aberto).");
+  const info = SEGMENTOS[segmento];
+  return {
+    ok: true,
+    tipo: "arrecadacao",
+    linhaDigitavel: ld,
+    codigoBarras: cb,
+    valor: valorEfetivo && valorRaw > 0 ? valorRaw / 100 : null,
+    vencimento: null,
+    // nunca disponível neste formato
+    codigoBanco: null,
+    nomeBanco: null,
+    segmento,
+    nomeSegmento: info?.nome ?? null,
+    categoriaSugerida: info?.categoria ?? null,
+    pendencias: { vencimento: true, valor: !valorEfetivo || valorRaw === 0 },
+    avisos
+  };
+}
+function formatarLinhaDigitavel(ld) {
+  const d = normalizar(ld);
+  if (d.length === 47) {
+    return `${d.slice(0, 5)}.${d.slice(5, 10)} ${d.slice(10, 15)}.${d.slice(15, 21)} ${d.slice(21, 26)}.${d.slice(26, 32)} ${d[32]} ${d.slice(33)}`;
+  }
+  if (d.length === 48) {
+    return `${d.slice(0, 12)} ${d.slice(12, 24)} ${d.slice(24, 36)} ${d.slice(36, 48)}`;
+  }
+  return d;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Camada de apresentação da prévia.
+
+   Acima deste ponto está boleto.ts transpilado, sem uma linha de lógica
+   alterada. Daqui para baixo é só protótipo: as constantes de notificação
+   espelham notificacoes.ts (que não roda no browser porque importa
+   expo-notifications), e o resto simula câmera, Supabase e iOS.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ── Espelho de notificacoes.ts ──────────────────────────────────────────────
+const LIMITE_IOS = 64;
+const COTA_CONTAS = 56;
+const DIAS_ALERTA = [3, 1, 0];
+const HORA_ALERTA = 8;
+const MINUTO_ALERTA = 0;
+
+// ── Categorias semeadas por seed_categorias() em 0001_init.sql ──────────────
+const CATEGORIAS = [
+  { slug: 'moradia', nome: 'Moradia', cor: '#0F766E' },
+  { slug: 'utilidades', nome: 'Utilidades', cor: '#0369A1' },
+  { slug: 'telecom', nome: 'Telecom', cor: '#7C3AED' },
+  { slug: 'impostos', nome: 'Impostos', cor: '#B91C1C' },
+  { slug: 'veiculo', nome: 'Veículo', cor: '#C2410C' },
+  { slug: 'saude', nome: 'Saúde', cor: '#059669' },
+  { slug: 'educacao', nome: 'Educação', cor: '#2563EB' },
+  { slug: 'cartao', nome: 'Cartão', cor: '#4B5563' },
+  { slug: 'outros', nome: 'Outros', cor: '#6B7280' },
+];
+const corCat = (slug) => (CATEGORIAS.find((c) => c.slug === slug) || CATEGORIAS[8]).cor;
+const nomeCat = (slug) => (CATEGORIAS.find((c) => c.slug === slug) || CATEGORIAS[8]).nome;
+
+// ── Datas ───────────────────────────────────────────────────────────────────
+const DIA_MS_UI = 86400000;
+const BASE_NOVA = Date.UTC(2022, 4, 29);
+
+const hoje = new Date();
+const hojeLocal = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+
+function isoLocal(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function deISO(iso) {
+  const [a, m, d] = iso.split('-').map(Number);
+  return new Date(a, m - 1, d);
+}
+function maisDias(n) {
+  const d = new Date(hojeLocal);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+function fatorDe(iso) {
+  const [a, m, d] = iso.split('-').map(Number);
+  return Math.round((Date.UTC(a, m - 1, d) - BASE_NOVA) / DIA_MS_UI);
+}
+function diasAte(iso) {
+  return Math.round((deISO(iso) - hojeLocal) / DIA_MS_UI);
+}
+const fmtData = (iso) => deISO(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+const fmtDataLonga = (iso) => deISO(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+const fmtDataHora = (d) =>
+  d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+const brl = (v) => (v === null || v === undefined ? null : v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+
+// ── Fabricação de boletos válidos (mesmos helpers da suíte de testes) ───────
+function montarBancario(banco, fator, centavos, livre25) {
+  const semDV = banco + '9' + String(fator).padStart(4, '0') + String(centavos).padStart(10, '0') + livre25;
+  const dv = mod11Barras(semDV);
+  const cb = banco + '9' + dv + semDV.slice(4);
+  return barrasParaLinhaBancario(cb);
+}
+function montarArrecadacao(segmento, ident, valor11, resto29) {
+  const corpo = '8' + segmento + ident + '0' + valor11 + resto29;
+  const semDV = corpo.slice(0, 3) + corpo.slice(4);
+  const dv = ident === 6 || ident === 7 ? mod10(semDV) : mod11Arrecadacao(semDV);
+  const cb = corpo.slice(0, 3) + dv + corpo.slice(4);
+  return barrasParaLinhaArrecadacao(cb);
+}
+const bancarioEm = (banco, dias, centavos, livre25) =>
+  montarBancario(banco, fatorDe(isoLocal(maisDias(dias))), centavos, livre25);
+
+// ── Amostras oferecidas na captura ─────────────────────────────────────────
+const AMOSTRAS = [
+  { rotulo: 'Bradesco · R$ 1.234,56', ld: bancarioEm('237', 9, 123456, '1234567890123456789012345') },
+  { rotulo: 'Itaú · vence em 2 dias', ld: bancarioEm('341', 2, 8990, '9087612340000004455667788') },
+  { rotulo: 'Inter · sem valor no código', ld: bancarioEm('077', 5, 0, '1112223334445556667778889') },
+  { rotulo: 'Energia · arrecadação', ld: montarArrecadacao(3, 8, '00000018743', '12345678901234567890123456789') },
+  { rotulo: 'IPTU · arrecadação', ld: montarArrecadacao(1, 8, '00000041500', '55554444333322221111000099998') },
+  { rotulo: 'Telecom · quantidade de moeda', ld: montarArrecadacao(4, 7, '00000005000', '11223344556677889900112233445') },
+  { rotulo: 'Linha com um dígito trocado', ld: bancarioEm('237', 9, 123456, '1234567890123456789012345').replace(/.$/, (c) => String((Number(c) + 5) % 10)) },
+];
+
+// ── Estado ──────────────────────────────────────────────────────────────────
+let proximoId = 1;
+const novoId = () => `c${proximoId++}`;
+
+function contaDeParse(parse, extra) {
+  return {
+    id: novoId(),
+    descricao: extra.descricao,
+    valor: extra.valor ?? parse.valor,
+    vencimento: extra.vencimento ?? parse.vencimento,
+    categoria: extra.categoria ?? parse.categoriaSugerida ?? 'outros',
+    status: extra.status ?? 'rascunho',
+    origem: extra.origem ?? 'manual',
+    tipo: parse.tipo,
+    linhaDigitavel: parse.linhaDigitavel,
+    codigoBarras: parse.codigoBarras,
+    pendencias: parse.pendencias,
+    avisos: parse.avisos,
+    emissor: parse.nomeBanco || parse.nomeSegmento || '—',
+  };
+}
+
+function semear() {
+  const feitas = [];
+  const receita = [
+    { ld: bancarioEm('237', 3, 189040, '4455667788990011223344556'), descricao: 'Aluguel', categoria: 'moradia', origem: 'clipboard' },
+    { ld: bancarioEm('341', 6, 21990, '7788990011223344556677889'), descricao: 'Internet · Vivo Fibra', categoria: 'telecom', origem: 'camera' },
+    { ld: bancarioEm('104', 14, 45210, '5544332211009988776655443'), descricao: 'Consórcio', categoria: 'outros', origem: 'manual' },
+    { ld: bancarioEm('001', -2, 31000, '2223334445556667778889990'), descricao: 'Plano de saúde', categoria: 'saude', origem: 'clipboard' },
+    { ld: bancarioEm('033', 21, 78300, '3334445556667778889990001'), descricao: 'Escola', categoria: 'educacao', origem: 'manual' },
+    { ld: bancarioEm('756', 27, 12750, '6667778889990001112223334'), descricao: 'Seguro do carro', categoria: 'veiculo', origem: 'manual' },
+  ];
+  for (const r of receita) {
+    const p = parseBoleto(r.ld, hoje);
+    if (!p.ok) continue;
+    feitas.push(contaDeParse(p, { descricao: r.descricao, categoria: r.categoria, status: 'agendada', origem: r.origem }));
+  }
+  // Uma arrecadação chega como rascunho: o código não carrega a data.
+  const arr = parseBoleto(montarArrecadacao(2, 6, '00000009280', '98765432109876543210987654321'), hoje);
+  if (arr.ok) {
+    feitas.push(contaDeParse(arr, { descricao: 'Água · Sabesp', categoria: 'utilidades', status: 'rascunho', origem: 'camera' }));
+  }
+  return feitas;
+}
+
+const estado = {
+  tela: 'vencimentos',
+  contas: semear(),
+  entrada: '',
+  ultimoParse: null,
+  rascunho: null,
+  clipboardVisivel: true,
+  clipboardLd: AMOSTRAS[3].ld,
+};
+
+// ── Utilidades de DOM ───────────────────────────────────────────────────────
+const $ = (sel) => document.querySelector(sel);
+const esc = (s) =>
+  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+let toastTimer = null;
+function toast(msg, mono) {
+  const el = $('#toast');
+  el.innerHTML = `<span>${esc(msg)}</span>${mono ? `<span class="mono">${esc(mono)}</span>` : ''}`;
+  el.classList.add('visivel');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('visivel'), 2600);
+}
+
+async function copiar(texto, rotulo) {
+  try {
+    await navigator.clipboard.writeText(texto);
+    toast(rotulo || 'Linha digitável copiada');
+  } catch {
+    toast('Selecione para copiar', formatarLinhaDigitavel(texto));
+  }
+}
+
+// ── Estado de tempo de uma conta ────────────────────────────────────────────
+function estadoConta(c) {
+  if (c.status === 'rascunho') return { chave: 'rascunho', rot: 'Rascunho', classe: 'rascunho' };
+  const d = diasAte(c.vencimento);
+  if (d < 0) return { chave: 'vencido', rot: `Venceu há ${-d} ${-d === 1 ? 'dia' : 'dias'}`, classe: 'vencido' };
+  if (d === 0) return { chave: 'hoje', rot: 'Vence hoje', classe: 'hoje' };
+  if (d === 1) return { chave: 'hoje', rot: 'Vence amanhã', classe: 'hoje' };
+  return { chave: 'ok', rot: `Em ${d} dias`, classe: 'ok' };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Telas
+// ═══════════════════════════════════════════════════════════════════════════
+
+function telaVencimentos() {
+  const rascunhos = estado.contas.filter((c) => c.status === 'rascunho');
+  const agendadas = estado.contas
+    .filter((c) => c.status === 'agendada')
+    .sort((a, b) => a.vencimento.localeCompare(b.vencimento));
+
+  const vencidas = agendadas.filter((c) => diasAte(c.vencimento) < 0);
+  const semana = agendadas.filter((c) => diasAte(c.vencimento) >= 0 && diasAte(c.vencimento) <= 7);
+  const depois = agendadas.filter((c) => diasAte(c.vencimento) > 7);
+
+  const total = agendadas.reduce((s, c) => s + (c.valor || 0), 0);
+
+  const linha = (c) => {
+    const e = estadoConta(c);
+    return `
+      <button class="conta e-${e.classe}" data-acao="abrir" data-id="${c.id}" type="button">
+        <span class="risco"></span>
+        <span>
+          <span class="nome">${esc(c.descricao)}</span>
+          <span class="sub">${esc(c.emissor)} &middot; ${c.vencimento ? esc(fmtDataLonga(c.vencimento)) : 'sem data'}</span>
+        </span>
+        <span class="dir">
+          ${c.valor !== null ? `<span class="val">${esc(brl(c.valor))}</span>` : '<span class="val aconfirmar">valor a confirmar</span>'}
+          <span class="pill ${e.classe}"><span class="ponto"></span>${esc(e.rot)}</span>
+        </span>
+      </button>`;
+  };
+
+  const grupo = (rot, itens) =>
+    itens.length ? `<div class="grupo-rot">${rot}</div>${itens.map(linha).join('')}` : '';
+
+  return `
+    <div class="cartao" style="gap:4px">
+      <span class="rotulo">Em aberto</span>
+      <span class="mono" style="font-size:27px;font-weight:640;letter-spacing:-.02em">${esc(brl(total))}</span>
+      <span style="font-size:12px;color:var(--tinta-3)">
+        ${agendadas.length} agendada${agendadas.length === 1 ? '' : 's'}${rascunhos.length ? ` · ${rascunhos.length} aguardando confirmação` : ''}
+      </span>
+    </div>
+    ${grupo('Precisam de confirmação', rascunhos)}
+    ${grupo('Vencidas', vencidas)}
+    ${grupo('Próximos 7 dias', semana)}
+    ${grupo('Mais adiante', depois)}
+    ${agendadas.length + rascunhos.length === 0 ? '<p class="vazio">Nenhuma conta ainda.</p>' : ''}
+  `;
+}
+
+function telaCapturar() {
+  const p = estado.ultimoParse;
+  let resultado = '';
+
+  if (estado.entrada.trim() && p) {
+    if (p.ok) {
+      resultado = `
+        <div class="cartao">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+            <span class="rotulo">${p.tipo === 'bancario' ? 'Boleto bancário' : 'Arrecadação'}</span>
+            <span style="font-size:12px;color:var(--tinta-3)">${esc(p.nomeBanco || p.nomeSegmento || '—')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+            <span class="mono" style="font-size:21px;font-weight:640">${p.valor !== null ? esc(brl(p.valor)) : '—'}</span>
+            <span class="mono" style="font-size:13px;color:var(--tinta-2)">${p.vencimento ? esc(fmtData(p.vencimento)) : 'sem data'}</span>
+          </div>
+          ${
+            p.pendencias.vencimento || p.pendencias.valor
+              ? `<div style="font-size:12px;color:var(--hoje)">Falta confirmar: ${[
+                  p.pendencias.vencimento ? 'vencimento' : null,
+                  p.pendencias.valor ? 'valor' : null,
+                ]
+                  .filter(Boolean)
+                  .join(' e ')}</div>`
+              : '<div style="font-size:12px;color:var(--ok)">Vencimento e valor vieram do código.</div>'
+          }
+          <button class="primario" data-acao="continuar" type="button">Continuar</button>
+        </div>`;
+    } else {
+      resultado = `
+        <div class="erro-caixa">
+          <span class="cod">${esc(p.codigo)}</span>
+          <span>${esc(p.erro)}</span>
+        </div>`;
+    }
+  }
+
+  return `
+    ${
+      estado.clipboardVisivel
+        ? `<div class="clipboard">
+             <span class="titulo">Boleto na área de transferência</span>
+             <span class="linha">${esc(formatarLinhaDigitavel(estado.clipboardLd))}</span>
+             <div class="botoes">
+               <button class="secundario" data-acao="usar-clipboard" type="button">Adicionar conta detectada</button>
+               <button class="secundario" data-acao="ignorar-clipboard" type="button">Agora não</button>
+             </div>
+           </div>`
+        : ''
+    }
+
+    <div class="campo">
+      <label class="rotulo" for="entrada">Linha digitável, código de barras ou texto colado</label>
+      <textarea id="entrada" class="linha-entrada" spellcheck="false"
+        placeholder="34191.79001 01043.510047 91020.150008 4 12345678901234">${esc(estado.entrada)}</textarea>
+      <span style="font-size:11.5px;color:var(--tinta-3)">
+        Aceita 47 dígitos (bancário), 48 (arrecadação) ou 44 (código de barras da câmera). Pontuação é ignorada.
+      </span>
+    </div>
+
+    ${resultado}
+
+    <div class="campo">
+      <span class="rotulo">Amostras</span>
+      <div class="amostras">
+        ${AMOSTRAS.map(
+          (a, i) => `<button class="amostra" data-acao="amostra" data-i="${i}" type="button">${esc(a.rotulo)}</button>`,
+        ).join('')}
+      </div>
+    </div>
+
+    <div class="cartao" style="gap:6px">
+      <span class="rotulo">Câmera</span>
+      <span style="font-size:12.5px;color:var(--tinta-2)">
+        No app, esta aba abre o VisionCamera com <code class="mono">codeTypes: ['itf']</code> e lê os 44 dígitos
+        direto do código de barras. Não dá para simular no browser — exige dev build.
+      </span>
+    </div>
+  `;
+}
+
+function telaConfirmar() {
+  const r = estado.rascunho;
+  const p = r.parse;
+  const faltaData = !r.vencimento;
+  const faltaValor = r.valor === null || r.valor === '' || r.valor === undefined;
+  const podeAgendar = !faltaData && !faltaValor;
+
+  return `
+    <div class="cartao" style="gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+        <span class="rotulo">${p.tipo === 'bancario' ? 'Boleto bancário' : 'Arrecadação'}</span>
+        <span style="font-size:12px;color:var(--tinta-3)">${esc(p.nomeBanco || p.nomeSegmento || '—')}</span>
+      </div>
+      <span class="mono" style="font-size:11.5px;color:var(--tinta-2);word-break:break-all;line-height:1.6">
+        ${esc(formatarLinhaDigitavel(p.linhaDigitavel))}
+      </span>
+    </div>
+
+    ${
+      p.avisos.length
+        ? `<ul class="avisos">${p.avisos.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>`
+        : ''
+    }
+
+    <div class="campo">
+      <label class="rotulo" for="f-desc">Descrição</label>
+      <input id="f-desc" type="text" value="${esc(r.descricao)}" />
+    </div>
+
+    <div class="campo ${faltaValor ? 'pendente' : ''}">
+      <label class="rotulo" for="f-valor">Valor</label>
+      <input id="f-valor" type="text" inputmode="decimal" value="${r.valor !== null && r.valor !== undefined ? String(r.valor).replace('.', ',') : ''}" placeholder="0,00" />
+      ${p.pendencias.valor ? '<span class="dica">O código não traz valor confiável — digite o impresso.</span>' : ''}
+    </div>
+
+    <div class="campo ${faltaData ? 'pendente' : ''}">
+      <label class="rotulo" for="f-venc">Vencimento</label>
+      <input id="f-venc" type="date" value="${esc(r.vencimento || '')}" />
+      ${
+        p.pendencias.vencimento
+          ? `<span class="dica">Arrecadação não carrega data no código. Use a impressa no boleto.</span>
+             <div class="amostras" style="margin-top:2px">
+               <button class="amostra" data-acao="dia" data-dia="10" type="button">dia 10</button>
+               <button class="amostra" data-acao="dia" data-dia="20" type="button">dia 20</button>
+               <button class="amostra" data-acao="dia" data-dia="fim" type="button">último dia do mês</button>
+             </div>`
+          : ''
+      }
+    </div>
+
+    <div class="campo">
+      <span class="rotulo">Categoria</span>
+      <div class="cats">
+        ${CATEGORIAS.map(
+          (c) => `<button class="cat" data-acao="cat" data-slug="${c.slug}" aria-pressed="${c.slug === r.categoria}" type="button">
+                    <span class="bolinha" style="background:${c.cor}"></span>${esc(c.nome)}
+                  </button>`,
+        ).join('')}
+      </div>
+    </div>
+
+    <button class="primario" data-acao="confirmar" type="button" ${podeAgendar ? '' : 'disabled'}>
+      Confirmar e avisar
+    </button>
+    <span style="font-size:11.5px;color:var(--tinta-3);text-align:center">
+      ${
+        podeAgendar
+          ? 'Agenda alertas em D-3, D-1 e no dia, às 8h.'
+          : 'A constraint contas_agendavel bloqueia sair de rascunho sem data e valor.'
+      }
+    </span>
+  `;
+}
+
+function telaResumo() {
+  const ativas = estado.contas.filter((c) => c.status !== 'paga' && c.valor !== null);
+  const total = ativas.reduce((s, c) => s + c.valor, 0);
+  const porCat = {};
+  for (const c of ativas) porCat[c.categoria] = (porCat[c.categoria] || 0) + c.valor;
+  const ordenado = Object.entries(porCat).sort((a, b) => b[1] - a[1]);
+  const maior = ordenado.length ? ordenado[0][1] : 1;
+
+  return `
+    <div class="cartao" style="gap:4px">
+      <span class="rotulo">Total em aberto</span>
+      <span class="mono" style="font-size:27px;font-weight:640;letter-spacing:-.02em">${esc(brl(total))}</span>
+      <span style="font-size:12px;color:var(--tinta-3)">${ativas.length} conta${ativas.length === 1 ? '' : 's'} com valor definido</span>
+    </div>
+
+    <div class="cartao">
+      <span class="rotulo">Por categoria</span>
+      ${
+        ordenado.length
+          ? ordenado
+              .map(
+                ([slug, v]) => `
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;justify-content:space-between;font-size:13px">
+            <span>${esc(nomeCat(slug))}</span>
+            <span class="mono" style="font-weight:600">${esc(brl(v))}</span>
+          </div>
+          <div class="medidor"><i style="width:${Math.round((v / maior) * 100)}%;background:${corCat(slug)}"></i></div>
+        </div>`,
+              )
+              .join('')
+          : '<p class="vazio">Sem contas com valor.</p>'
+      }
+    </div>
+
+    <div class="cartao" style="gap:6px">
+      <span class="rotulo">Esboço</span>
+      <span style="font-size:12.5px;color:var(--tinta-2)">
+        Gasto por categoria, evolução mensal, projeção e alerta de anomalia são Fase 3 no roadmap.
+        Isto aqui é só o formato — soma o que está em aberto, não o histórico pago.
+      </span>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Render
+// ═══════════════════════════════════════════════════════════════════════════
+
+const TITULOS = {
+  vencimentos: 'Vencimentos',
+  capturar: 'Capturar',
+  confirmar: 'Confirmar conta',
+  resumo: 'Resumo',
+};
+
+function render() {
+  const corpo = $('#corpo');
+  $('#tela-titulo').textContent = TITULOS[estado.tela];
+
+  const acao = $('#acao-topo');
+  if (estado.tela === 'vencimentos') {
+    acao.hidden = false;
+    acao.textContent = 'Adicionar';
+    acao.dataset.acao = 'ir-capturar';
+  } else if (estado.tela === 'confirmar') {
+    acao.hidden = false;
+    acao.textContent = 'Cancelar';
+    acao.dataset.acao = 'cancelar';
+  } else {
+    acao.hidden = true;
+  }
+
+  corpo.innerHTML =
+    estado.tela === 'vencimentos'
+      ? telaVencimentos()
+      : estado.tela === 'capturar'
+        ? telaCapturar()
+        : estado.tela === 'confirmar'
+          ? telaConfirmar()
+          : telaResumo();
+
+  for (const b of document.querySelectorAll('.aba')) {
+    const alvo = estado.tela === 'confirmar' ? 'capturar' : estado.tela;
+    b.setAttribute('aria-selected', String(b.dataset.tela === alvo));
+  }
+
+  corpo.scrollTop = 0;
+  renderInspetor();
+
+  // Foco automático no primeiro campo pendente (§5 da spec).
+  if (estado.tela === 'confirmar') {
+    const alvo = !estado.rascunho.vencimento ? $('#f-venc') : estado.rascunho.valor === null ? $('#f-valor') : null;
+    if (alvo) alvo.focus({ preventScroll: true });
+  }
+}
+
+// ── Inspetor: saída do parser ───────────────────────────────────────────────
+function renderInspetor() {
+  const alvo = $('#parser-saida');
+  const nota = $('#parser-nota');
+  const p = estado.ultimoParse;
+
+  if (!p) {
+    nota.textContent = 'nenhuma leitura ainda';
+    alvo.innerHTML =
+      '<p class="vazio">Cole uma linha digitável na aba <strong>Capturar</strong> para ver o retorno de <code>parseBoleto()</code>.</p>';
+  } else if (!p.ok) {
+    nota.textContent = 'rejeitado';
+    alvo.innerHTML = `
+      <div class="erro-caixa">
+        <span class="cod">${esc(p.codigo)}</span>
+        <span>${esc(p.erro)}</span>
+      </div>
+      <p style="margin:0;font-size:12.5px;color:var(--tinta-2)">
+        O motor recusa antes de gravar. Um dígito trocado quase sempre quebra um DV de campo — é por isso que
+        colar sem conferir é seguro.
+      </p>`;
+  } else {
+    nota.textContent = `${p.tipo} · ${p.codigoBarras.length} dígitos de barras`;
+    const nulo = (v, fmt) => (v === null || v === undefined ? '<dd class="nulo">null</dd>' : `<dd>${esc(fmt ? fmt(v) : v)}</dd>`);
+    alvo.innerHTML = `
+      <div class="barcode-caixa">
+        <canvas class="barcode" id="barcode"></canvas>
+        <span class="legenda">Interleaved 2 of 5 desenhado a partir de <code>codigoBarras</code> — a simbologia que o scanner lê.</span>
+      </div>
+      <dl class="kv">
+        <dt>tipo</dt><dd>${esc(p.tipo)}</dd>
+        <dt>valor</dt>${nulo(p.valor, (v) => brl(v))}
+        <dt>vencimento</dt>${nulo(p.vencimento)}
+        <dt>${p.tipo === 'bancario' ? 'banco' : 'segmento'}</dt>
+        ${nulo(p.tipo === 'bancario' ? p.nomeBanco && `${p.codigoBanco} ${p.nomeBanco}` : p.nomeSegmento && `${p.segmento} ${p.nomeSegmento}`)}
+        <dt>categoria sugerida</dt>${nulo(p.categoriaSugerida)}
+        <dt>pendências</dt><dd>${esc(JSON.stringify(p.pendencias))}</dd>
+        <dt>linha digitável</dt><dd>${esc(p.linhaDigitavel)}</dd>
+        <dt>código de barras</dt><dd>${esc(p.codigoBarras)}</dd>
+      </dl>
+      ${p.avisos.length ? `<ul class="avisos">${p.avisos.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}
+    `;
+    desenharITF($('#barcode'), p.codigoBarras);
+  }
+
+  renderFila();
+  renderRegras();
+}
+
+// ── Inspetor: fila de notificações ──────────────────────────────────────────
+function momentoAlerta(iso, diasAntes) {
+  const [a, m, d] = iso.split('-').map(Number);
+  const dt = new Date(a, m - 1, d, HORA_ALERTA, MINUTO_ALERTA, 0, 0);
+  dt.setDate(dt.getDate() - diasAntes);
+  return dt;
+}
+
+function planejar(contas, agora = new Date()) {
+  const out = [];
+  for (const c of contas) {
+    for (const dias of DIAS_ALERTA) {
+      const quando = momentoAlerta(c.vencimento, dias);
+      if (quando <= agora) continue;
+      const titulo =
+        dias === 0 ? `Vence hoje: ${c.descricao}` : dias === 1 ? `Vence amanhã: ${c.descricao}` : `Vence em ${dias} dias: ${c.descricao}`;
+      out.push({ contaId: c.id, diasAntes: dias, quando, titulo });
+    }
+  }
+  return out.sort((a, b) => a.quando - b.quando);
+}
+
+function renderFila() {
+  const agendaveis = estado.contas.filter((c) => c.status === 'agendada' && c.vencimento);
+  const planejados = planejar(agendaveis);
+  const janela = planejados.slice(0, COTA_CONTAS);
+  const truncado = planejados.length > janela.length;
+  const cobertoAte = janela.length ? janela[janela.length - 1].quando : null;
+
+  $('#metricas').innerHTML = `
+    <div class="metrica"><span class="num">${planejados.length}</span><span class="cap">planejados</span></div>
+    <div class="metrica"><span class="num">${janela.length}</span><span class="cap">na janela do device</span></div>
+    <div class="metrica ${truncado ? 'estourou' : ''}"><span class="num">${COTA_CONTAS}</span><span class="cap">cota (limite ${LIMITE_IOS})</span></div>
+    <div class="metrica"><span class="num" style="font-size:15px;padding-top:7px">${cobertoAte ? esc(fmtDataHora(cobertoAte)) : '—'}</span><span class="cap">coberto até</span></div>
+  `;
+
+  const pct = Math.min(100, (janela.length / COTA_CONTAS) * 100);
+  $('#medidor').innerHTML = `<i style="width:${pct}%"></i>${truncado ? '<i class="excedente" style="width:6%"></i>' : ''}`;
+
+  $('#fila-nota').textContent = truncado
+    ? `${planejados.length - janela.length} alertas ficam fora do device até a próxima reconciliação. Nada se perde: a tabela alertas tem a fila inteira, o device só carrega a janela.`
+    : `Cabe tudo no device. A partir de ~${Math.floor(COTA_CONTAS / DIAS_ALERTA.length)} contas agendadas a fila começa a truncar.`;
+
+  $('#fila-corpo').innerHTML = planejados.length
+    ? planejados
+        .slice(0, 9)
+        .map((p, i) => {
+          const dentro = i < COTA_CONTAS;
+          return `<tr>
+            <td class="quando">${esc(fmtDataHora(p.quando))}</td>
+            <td class="${dentro ? '' : 'fora'}">${esc(p.titulo)}</td>
+            <td class="${dentro ? '' : 'fora'}">${dentro ? 'agendado' : 'fora da janela'}</td>
+          </tr>`;
+        })
+        .join('') + (planejados.length > 9 ? `<tr><td class="quando">…</td><td colspan="2" class="fora">mais ${planejados.length - 9}</td></tr>` : '')
+    : '<tr><td colspan="3" class="fora">Nenhum alerta futuro.</td></tr>';
+}
+
+// ── Inspetor: constraints ───────────────────────────────────────────────────
+function renderRegras() {
+  const rascunhos = estado.contas.filter((c) => c.status === 'rascunho').length;
+  const agendadas = estado.contas.filter((c) => c.status === 'agendada').length;
+  const linhas = new Set(estado.contas.map((c) => c.linhaDigitavel));
+  $('#regras').innerHTML = `
+    <dt>contas_agendavel</dt>
+    <dd class="${rascunhos ? '' : 'nulo'}">${agendadas} agendada(s) · ${rascunhos} bloqueada(s) em rascunho</dd>
+    <dt>contas_linha_unica</dt>
+    <dd>${linhas.size} linha(s) distinta(s) de ${estado.contas.length} conta(s)</dd>
+    <dt>rls</dt>
+    <dd class="nulo">todas as tabelas, desde 0001</dd>
+  `;
+}
+
+// ── Código de barras ITF (Interleaved 2 of 5) ───────────────────────────────
+const ITF = {
+  0: 'nnwwn', 1: 'wnnnw', 2: 'nwnnw', 3: 'wwnnn', 4: 'nnwnw',
+  5: 'wnwnn', 6: 'nwwnn', 7: 'nnnww', 8: 'wnnwn', 9: 'nwnwn',
+};
+
+function elementosITF(digitos) {
+  const els = [];
+  const push = (largura, barra) => els.push({ largura, barra });
+  // Start: n n n n
+  push(1, true); push(1, false); push(1, true); push(1, false);
+  for (let i = 0; i + 1 < digitos.length; i += 2) {
+    const a = ITF[digitos[i]];
+    const b = ITF[digitos[i + 1]];
+    for (let k = 0; k < 5; k++) {
+      push(a[k] === 'w' ? 3 : 1, true);
+      push(b[k] === 'w' ? 3 : 1, false);
+    }
+  }
+  // Stop: w n n
+  push(3, true); push(1, false); push(1, true);
+  return els;
+}
+
+function desenharITF(canvas, digitos) {
+  if (!canvas || !/^\d+$/.test(digitos) || digitos.length % 2 !== 0) return;
+  const els = elementosITF(digitos);
+  const unidades = els.reduce((s, e) => s + e.largura, 0);
+
+  const dpr = window.devicePixelRatio || 1;
+  const larguraCSS = canvas.clientWidth || 420;
+  const alturaCSS = 62;
+  canvas.width = Math.round(larguraCSS * dpr);
+  canvas.height = Math.round(alturaCSS * dpr);
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, larguraCSS, alturaCSS);
+
+  const u = larguraCSS / unidades;
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--tinta').trim() || '#131819';
+
+  let x = 0;
+  for (const e of els) {
+    const w = e.largura * u;
+    if (e.barra) ctx.fillRect(x, 0, Math.max(w - 0.15, 0.4), alturaCSS);
+    x += w;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Interação
+// ═══════════════════════════════════════════════════════════════════════════
+
+function abrirRascunhoDeParse(parse) {
+  estado.rascunho = {
+    parse,
+    contaId: null,
+    descricao: parse.nomeBanco ? `Boleto ${parse.nomeBanco}` : parse.nomeSegmento || 'Nova conta',
+    valor: parse.valor,
+    vencimento: parse.vencimento,
+    categoria: parse.categoriaSugerida || 'outros',
+  };
+  estado.tela = 'confirmar';
+  render();
+}
+
+function abrirRascunhoDeConta(conta) {
+  const p = parseBoleto(conta.linhaDigitavel, hoje);
+  if (!p.ok) return;
+  estado.ultimoParse = p;
+  estado.rascunho = {
+    parse: p,
+    contaId: conta.id,
+    descricao: conta.descricao,
+    valor: conta.valor,
+    vencimento: conta.vencimento,
+    categoria: conta.categoria,
+  };
+  estado.tela = 'confirmar';
+  render();
+}
+
+function parseValorBR(txt) {
+  const limpo = String(txt).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+  const n = Number(limpo);
+  return limpo === '' || Number.isNaN(n) ? null : n;
+}
+
+document.addEventListener('click', (ev) => {
+  const alvo = ev.target.closest('[data-acao], .aba');
+  if (!alvo) return;
+
+  if (alvo.classList.contains('aba')) {
+    estado.tela = alvo.dataset.tela;
+    render();
+    return;
+  }
+
+  const acao = alvo.dataset.acao;
+
+  if (acao === 'ir-capturar') {
+    estado.tela = 'capturar';
+    render();
+  } else if (acao === 'cancelar') {
+    estado.rascunho = null;
+    estado.tela = 'vencimentos';
+    render();
+  } else if (acao === 'amostra') {
+    estado.entrada = AMOSTRAS[Number(alvo.dataset.i)].ld;
+    estado.ultimoParse = parseBoleto(estado.entrada, hoje);
+    render();
+  } else if (acao === 'usar-clipboard') {
+    const p = parseBoleto(estado.clipboardLd, hoje);
+    estado.clipboardVisivel = false;
+    if (p.ok) abrirRascunhoDeParse(p);
+  } else if (acao === 'ignorar-clipboard') {
+    estado.clipboardVisivel = false;
+    render();
+  } else if (acao === 'continuar') {
+    if (estado.ultimoParse && estado.ultimoParse.ok) abrirRascunhoDeParse(estado.ultimoParse);
+  } else if (acao === 'abrir') {
+    const c = estado.contas.find((x) => x.id === alvo.dataset.id);
+    if (!c) return;
+    if (c.status === 'rascunho') abrirRascunhoDeConta(c);
+    else copiar(c.linhaDigitavel);
+  } else if (acao === 'cat') {
+    estado.rascunho.categoria = alvo.dataset.slug;
+    render();
+  } else if (acao === 'dia') {
+    const d = new Date(hojeLocal);
+    if (alvo.dataset.dia === 'fim') {
+      d.setMonth(d.getMonth() + 1, 0);
+    } else {
+      const dia = Number(alvo.dataset.dia);
+      d.setDate(dia);
+      if (d < hojeLocal) d.setMonth(d.getMonth() + 1);
+    }
+    estado.rascunho.vencimento = isoLocal(d);
+    render();
+  } else if (acao === 'confirmar') {
+    const r = estado.rascunho;
+    const duplicada = estado.contas.some(
+      (c) => c.linhaDigitavel === r.parse.linhaDigitavel && c.id !== r.contaId,
+    );
+    if (duplicada) {
+      toast('Você já tem essa conta', 'contas_linha_unica');
+      return;
+    }
+    if (r.contaId) {
+      const c = estado.contas.find((x) => x.id === r.contaId);
+      Object.assign(c, {
+        descricao: r.descricao,
+        valor: r.valor,
+        vencimento: r.vencimento,
+        categoria: r.categoria,
+        status: 'agendada',
+      });
+    } else {
+      estado.contas.push(
+        contaDeParse(r.parse, {
+          descricao: r.descricao,
+          valor: r.valor,
+          vencimento: r.vencimento,
+          categoria: r.categoria,
+          status: 'agendada',
+          origem: 'clipboard',
+        }),
+      );
+    }
+    const quantos = planejar([{ ...r, id: 'x' }]).length;
+    estado.rascunho = null;
+    estado.entrada = '';
+    estado.tela = 'vencimentos';
+    render();
+    toast(quantos ? `Agendado · ${quantos} alerta${quantos === 1 ? '' : 's'}` : 'Conta salva');
+  }
+});
+
+document.addEventListener('input', (ev) => {
+  const id = ev.target.id;
+  if (id === 'entrada') {
+    estado.entrada = ev.target.value;
+    estado.ultimoParse = estado.entrada.trim() ? parseBoleto(estado.entrada, hoje) : null;
+    const sel = ev.target.selectionStart;
+    render();
+    const novo = $('#entrada');
+    if (novo) {
+      novo.focus({ preventScroll: true });
+      try { novo.setSelectionRange(sel, sel); } catch {}
+    }
+  } else if (id === 'f-desc') {
+    estado.rascunho.descricao = ev.target.value;
+  } else if (id === 'f-valor') {
+    estado.rascunho.valor = parseValorBR(ev.target.value);
+    $('[data-acao="confirmar"]').disabled = !(estado.rascunho.valor !== null && estado.rascunho.vencimento);
+  } else if (id === 'f-venc') {
+    estado.rascunho.vencimento = ev.target.value || null;
+    $('[data-acao="confirmar"]').disabled = !(estado.rascunho.valor !== null && estado.rascunho.vencimento);
+  }
+});
+
+// Primeira leitura já vem do clipboard detectado na abertura.
+estado.ultimoParse = parseBoleto(estado.clipboardLd, hoje);
+
+// Relógio da status bar
+function tick() {
+  $('#relogio').textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+tick();
+setInterval(tick, 30000);
+
+window.addEventListener('resize', () => {
+  const c = $('#barcode');
+  if (c && estado.ultimoParse && estado.ultimoParse.ok) desenharITF(c, estado.ultimoParse.codigoBarras);
+});
+
+render();
+</script>

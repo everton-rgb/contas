@@ -1,18 +1,7 @@
-// Metro num monorepo: precisa enxergar packages/core, que fica fora de apps/mobile.
+// O metro-config do Expo já detecta o workspace do monorepo sozinho: acha o
+// packages/core pelo watchFolders e resolve o node_modules hoisted da raiz.
+// Overrides manuais aqui (watchFolders, disableHierarchicalLookup) são
+// desnecessários e o expo-doctor reclama deles com razão.
 const { getDefaultConfig } = require('expo/metro-config');
-const path = require('path');
 
-const raizProjeto = __dirname;
-const raizWorkspace = path.resolve(raizProjeto, '../..');
-
-const config = getDefaultConfig(raizProjeto);
-
-config.watchFolders = [raizWorkspace];
-config.resolver.nodeModulesPaths = [
-  path.resolve(raizProjeto, 'node_modules'),
-  path.resolve(raizWorkspace, 'node_modules'),
-];
-// Sem isto, uma dependência duplicada em dois níveis vira duas cópias do React.
-config.resolver.disableHierarchicalLookup = true;
-
-module.exports = config;
+module.exports = getDefaultConfig(__dirname);

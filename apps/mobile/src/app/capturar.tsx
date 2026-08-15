@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Scanner } from '@/features/scanner/Scanner';
+import { Scanner } from '@/features/scanner';
 import { buscarPorLinha, criarContaDeBoleto, BoletoDuplicado, type OrigemLeitura } from '@/lib/db';
 import { brl, dataCurta } from '@/lib/formato';
 import { Botao, Cartao, Campo, Entrada, Txt } from '@/ui/componentes';

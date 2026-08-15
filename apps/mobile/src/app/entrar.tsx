@@ -26,7 +26,7 @@ export default function Entrar() {
   async function enviar() {
     setEnviando(true);
     setErro(null);
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase().auth.signInWithOtp({
       email: email.trim(),
       options: { emailRedirectTo: Linking.createURL('/') },
     });

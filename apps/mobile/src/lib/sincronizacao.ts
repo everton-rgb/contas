@@ -11,6 +11,7 @@
  */
 
 import * as TaskManager from 'expo-task-manager';
+import { SUPORTA_NATIVO_PROPRIO } from './ambiente';
 import { listarContas, marcarVencidas } from './db';
 import { sincronizarAlertas, type ContaAlerta, type ResultadoSync } from './notificacoes';
 
@@ -19,11 +20,13 @@ export const TAREFA_ALERTAS = 'vence-reconciliar-alertas';
 type ModuloBackgroundTask = typeof import('expo-background-task');
 
 let BackgroundTask: ModuloBackgroundTask | null = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  BackgroundTask = require('expo-background-task') as ModuloBackgroundTask;
-} catch {
-  BackgroundTask = null;
+if (SUPORTA_NATIVO_PROPRIO) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    BackgroundTask = require('expo-background-task') as ModuloBackgroundTask;
+  } catch {
+    BackgroundTask = null;
+  }
 }
 
 /** true quando o build atual consegue rodar a reconciliação em background. */

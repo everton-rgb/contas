@@ -11,6 +11,7 @@
 
 import type { BoletoOk } from '@vence/core';
 import type { ComponentType } from 'react';
+import { SUPORTA_NATIVO_PROPRIO } from '@/lib/ambiente';
 import { StyleSheet, View } from 'react-native';
 import { Txt } from '@/ui/componentes';
 import { ESP, RAIO, usarPaleta } from '@/ui/tema';
@@ -22,12 +23,15 @@ export interface PropsScanner {
 
 let ScannerNativo: ComponentType<PropsScanner> | null = null;
 
-try {
-  // require, não import: precisa falhar em tempo de execução, não de bundle.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  ScannerNativo = (require('./Scanner') as { Scanner: ComponentType<PropsScanner> }).Scanner;
-} catch {
-  ScannerNativo = null;
+if (SUPORTA_NATIVO_PROPRIO) {
+  try {
+    // require, não import: precisa falhar em tempo de execução, não de bundle.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    ScannerNativo = (require('./Scanner') as { Scanner: ComponentType<PropsScanner> }).Scanner;
+  } catch {
+    // Módulo nativo ausente mesmo fora do Expo Go: cai no aviso.
+    ScannerNativo = null;
+  }
 }
 
 /** true quando o build atual consegue abrir a câmera. */

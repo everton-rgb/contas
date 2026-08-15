@@ -1,5 +1,8 @@
 /**
- * supabase.ts — cliente único do app.
+ * supabase.ts — cliente único do app, criado sob demanda.
+ *
+ * A criação é preguiçosa porque em MODO_LOCAL o app roda sem backend nenhum:
+ * importar este módulo não pode explodir por falta de variável de ambiente.
  *
  * A sessão vive no SecureStore (Keychain no iOS), não em AsyncStorage.
  * ⚠️ O SecureStore tem teto de 2048 bytes por item e o JWT do Supabase passa
@@ -8,17 +11,9 @@
  */
 
 import 'react-native-url-polyfill/auto';
-import { createClient, type SupportedStorage } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient, type SupportedStorage } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
-
-const URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const CHAVE = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!URL || !CHAVE) {
-  throw new Error(
-    'Faltam EXPO_PUBLIC_SUPABASE_URL e EXPO_PUBLIC_SUPABASE_ANON_KEY. Copie .env.example para .env.',
-  );
-}
+import { MODO_LOCAL, SUPABASE_ANON_KEY, SUPABASE_URL } from './config';
 
 const TAMANHO_PEDACO = 1800;
 
@@ -68,12 +63,22 @@ async function limparFatias(chave: string) {
   }
 }
 
-export const supabase = createClient(URL, CHAVE, {
-  auth: {
-    storage: armazenamentoFatiado,
-    autoRefreshToken: true,
-    persistSession: true,
-    // O magic link volta pelo deep link vence://, não pela URL do browser.
-    detectSessionInUrl: false,
-  },
-});
+let cliente: SupabaseClient | null = null;
+
+export function supabase(): SupabaseClient {
+  if (MODO_LOCAL) {
+    throw new Error('Supabase não configurado — o app está em modo local. Preencha o .env para conectar.');
+  }
+  if (!cliente) {
+    cliente = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        storage: armazenamentoFatiado,
+        autoRefreshToken: true,
+        persistSession: true,
+        // O magic link volta pelo deep link vence://, não pela URL do browser.
+        detectSessionInUrl: false,
+      },
+    });
+  }
+  return cliente;
+}

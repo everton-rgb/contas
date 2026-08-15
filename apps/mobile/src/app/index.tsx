@@ -10,7 +10,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, SectionList, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { listarContas, type Conta } from '@/lib/db';
+import { listarContas, MODO_LOCAL, type Conta } from '@/lib/db';
 import { brl, dataCurta, diasAte, rotuloPrazo, urgenciaDe } from '@/lib/formato';
 import { Botao, Etiqueta, Txt, Vazio } from '@/ui/componentes';
 import { ESP, RAIO, usarPaleta } from '@/ui/tema';
@@ -78,6 +78,11 @@ export default function Vencimentos() {
               {contas.filter((c) => c.status === 'agendada').length} agendadas
               {rascunhos ? ` · ${rascunhos} aguardando confirmação` : ''}
             </Txt>
+            {MODO_LOCAL ? (
+              <Txt variante="pequeno" cor={p.hoje}>
+                Modo local — os dados ficam só neste aparelho e somem se o app for desinstalado.
+              </Txt>
+            ) : null}
           </View>
         }
         renderSectionHeader={({ section }) => (

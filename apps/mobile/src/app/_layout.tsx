@@ -3,6 +3,8 @@
  *
  * Segura três coisas: a sessão do Supabase, o handler de notificação, e a
  * reconciliação da fila de alertas na abertura e a cada volta do background.
+ *
+ * Em MODO_LOCAL não há login: o app entra direto, com os dados no aparelho.
  */
 
 import { Stack, useRouter } from 'expo-router';
@@ -12,26 +14,33 @@ import { AppState, type AppStateStatus } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import type { Session } from '@supabase/supabase-js';
+import { MODO_LOCAL } from '@/lib/config';
 import { supabase } from '@/lib/supabase';
 import { configurarHandler, pedirPermissao } from '@/lib/notificacoes';
 import { aoAbrirApp, registrarTarefaDeFundo } from '@/lib/sincronizacao';
+import { SessaoContexto } from '@/lib/sessao';
 import { Carregando } from '@/ui/componentes';
 import { usarPaleta } from '@/ui/tema';
-import { SessaoContexto } from '@/lib/sessao';
 
 export default function Raiz() {
   const p = usarPaleta();
   const router = useRouter();
   const [sessao, setSessao] = useState<Session | null>(null);
-  const [carregando, setCarregando] = useState(true);
+  const [carregando, setCarregando] = useState(!MODO_LOCAL);
+
+  const autenticado = MODO_LOCAL || sessao !== null;
 
   // ── Sessão ────────────────────────────────────────────────────────────────
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSessao(data.session);
-      setCarregando(false);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_evento, nova) => setSessao(nova));
+    if (MODO_LOCAL) return;
+
+    void supabase()
+      .auth.getSession()
+      .then(({ data }) => {
+        setSessao(data.session);
+        setCarregando(false);
+      });
+    const { data: sub } = supabase().auth.onAuthStateChange((_evento, nova) => setSessao(nova));
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -40,7 +49,7 @@ export default function Raiz() {
     void configurarHandler();
   }, []);
 
-  // Tocar na notificação abre a conta. A tela cuida de copiar a linha.
+  // Tocar na notificação abre a conta com a linha digitável já copiada.
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener((resposta) => {
       const contaId = resposta.notification.request.content.data?.contaId;
@@ -53,7 +62,7 @@ export default function Raiz() {
   const estadoApp = useRef<AppStateStatus>(AppState.currentState);
 
   useEffect(() => {
-    if (!sessao) return;
+    if (!autenticado) return;
 
     const reconciliar = () => {
       void aoAbrirApp().catch(() => {
@@ -73,7 +82,7 @@ export default function Raiz() {
       estadoApp.current = proximo;
     });
     return () => sub.remove();
-  }, [sessao]);
+  }, [autenticado]);
 
   if (carregando) return <Carregando />;
 
@@ -89,13 +98,13 @@ export default function Raiz() {
             contentStyle: { backgroundColor: p.app },
           }}
         >
-          <Stack.Protected guard={sessao !== null}>
+          <Stack.Protected guard={autenticado}>
             <Stack.Screen name="index" options={{ title: 'Vencimentos' }} />
             <Stack.Screen name="capturar" options={{ title: 'Capturar', presentation: 'modal' }} />
             <Stack.Screen name="conta/[id]" options={{ title: 'Conta' }} />
           </Stack.Protected>
 
-          <Stack.Protected guard={sessao === null}>
+          <Stack.Protected guard={!autenticado}>
             <Stack.Screen name="entrar" options={{ headerShown: false }} />
           </Stack.Protected>
         </Stack>

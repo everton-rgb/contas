@@ -10,7 +10,7 @@
  */
 
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { formatarLinhaDigitavel } from '@vence/core';
+import { formatarLinhaDigitavel, parseBoleto } from '@vence/core';
 import * as Clipboard from 'expo-clipboard';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -74,7 +74,9 @@ export default function TelaConta() {
           setDescricao(c.descricao);
           setValorTexto(c.valor === null ? '' : String(c.valor).replace('.', ','));
           setVencimento(c.vencimento);
-          setCategoriaId(c.categoria_id);
+          // Sem categoria escolhida, usa a que o parser sugere pelo segmento
+          // de arrecadação (§5 da spec). O slug é estável nos dois modos.
+          setCategoriaId(c.categoria_id ?? sugerirCategoria(c, cats));
         }
       } catch (e) {
         if (vivo) setErro(e instanceof Error ? e.message : 'Não foi possível carregar.');
@@ -343,6 +345,14 @@ export default function TelaConta() {
       </ScrollView>
     </KeyboardAvoidingView>
   );
+}
+
+/** Casa a categoria sugerida pelo parser com a lista vinda do banco. */
+function sugerirCategoria(conta: Conta, categorias: Categoria[]): string | null {
+  if (!conta.linha_digitavel) return null;
+  const lido = parseBoleto(conta.linha_digitavel);
+  if (!lido.ok || !lido.categoriaSugerida) return null;
+  return categorias.find((c) => c.slug === lido.categoriaSugerida)?.id ?? null;
 }
 
 function Atalho({ texto, onPress }: { texto: string; onPress: () => void }) {

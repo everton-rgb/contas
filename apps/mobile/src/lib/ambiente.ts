@@ -8,9 +8,12 @@
  */
 
 import Constants, { ExecutionEnvironment } from 'expo-constants';
+import { Platform } from 'react-native';
 
 /** true quando rodando dentro do app Expo Go, e não num dev/release build. */
 export const EXPO_GO = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 
+export const WEB = Platform.OS === 'web';
+
 /** Módulos que só existem quando há código nativo próprio. */
-export const SUPORTA_NATIVO_PROPRIO = !EXPO_GO;
+export const SUPORTA_NATIVO_PROPRIO = !EXPO_GO && !WEB;

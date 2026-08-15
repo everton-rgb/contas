@@ -13,6 +13,7 @@
 
 import type { BoletoOk } from '@vence/core';
 import { Directory, File, Paths } from 'expo-file-system';
+import { WEB } from './ambiente';
 import {
   BoletoDuplicado,
   CATEGORIAS_PADRAO,
@@ -32,25 +33,48 @@ interface Deposito {
 
 let cache: Deposito | null = null;
 
+const CHAVE_WEB = 'vence.contas';
+
 function arquivo(): File {
   const pasta = new Directory(Paths.document, PASTA);
   if (!pasta.exists) pasta.create({ intermediates: true });
   return new File(pasta, ARQUIVO);
 }
 
+/**
+ * No device é um arquivo; na web é localStorage. A web existe para
+ * pré-visualizar o app sem aparelho (`npx expo start --web`) — o
+ * expo-file-system não atende esse caso.
+ */
+async function lerBruto(): Promise<string | null> {
+  if (WEB) return globalThis.localStorage?.getItem(CHAVE_WEB) ?? null;
+  const f = arquivo();
+  return f.exists ? await f.text() : null;
+}
+
+async function gravarBruto(conteudo: string): Promise<void> {
+  if (WEB) {
+    globalThis.localStorage?.setItem(CHAVE_WEB, conteudo);
+    return;
+  }
+  const f = arquivo();
+  if (!f.exists) f.create();
+  await f.write(conteudo);
+}
+
 async function ler(): Promise<Deposito> {
   if (cache) return cache;
   try {
-    const f = arquivo();
-    if (f.exists) {
-      const bruto = JSON.parse(await f.text()) as Deposito;
-      if (Array.isArray(bruto.contas)) {
-        cache = { versao: 1, contas: bruto.contas };
+    const bruto = await lerBruto();
+    if (bruto) {
+      const lido = JSON.parse(bruto) as Deposito;
+      if (Array.isArray(lido.contas)) {
+        cache = { versao: 1, contas: lido.contas };
         return cache;
       }
     }
   } catch {
-    // Arquivo corrompido ou ilegível: recomeça vazio em vez de travar o app.
+    // Conteúdo corrompido ou ilegível: recomeça vazio em vez de travar o app.
   }
   cache = { versao: 1, contas: [] };
   return cache;
@@ -58,9 +82,7 @@ async function ler(): Promise<Deposito> {
 
 async function gravar(deposito: Deposito): Promise<void> {
   cache = deposito;
-  const f = arquivo();
-  if (!f.exists) f.create();
-  await f.write(JSON.stringify(deposito));
+  await gravarBruto(JSON.stringify(deposito));
 }
 
 function novoId(): string {

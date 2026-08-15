@@ -46,6 +46,10 @@
           "resizeMode": "contain"
         }
       ]
-    ]
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
   }
 }

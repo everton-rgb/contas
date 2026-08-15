@@ -6,7 +6,7 @@
  * categoria, que vêm semeadas do banco por seed_categorias().
  */
 
-import { useColorScheme } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 
 export interface Paleta {
   papel: string;
@@ -83,5 +83,12 @@ export const TIPO = {
   micro: { fontSize: 11, fontWeight: '600' as const, letterSpacing: 1.1 },
 };
 
-/** Dígitos de boleto sempre em monoespaçada — é o conteúdo, não decoração. */
-export const MONO = { fontFamily: 'Menlo', fontVariant: ['tabular-nums' as const] };
+/**
+ * Dígitos de boleto sempre em monoespaçada — é o conteúdo, não decoração.
+ * 'Menlo' só existe no iOS: no Android e na web ela cai numa serifada e os
+ * valores param de alinhar.
+ */
+export const MONO = {
+  fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace', default: 'monospace' }),
+  fontVariant: ['tabular-nums' as const],
+};

@@ -192,23 +192,42 @@ Para mudar limites de plano: `update public.planos set limites = '{"disciplinas"
 
 ## Publicar no Netlify
 
-O arquivo `netlify.toml` fica na **raiz do repositório** e já define tudo:
+O arquivo `netlify.toml` fica na **raiz do repositório** e já define:
 
 - base `apps/medpuc`, comando `npm run build`, publicação de `dist`, Node 22;
 - redirecionamento de todas as rotas para `index.html` (SPA);
-- cabeçalhos de segurança (CSP, HSTS, X-Frame-Options, etc.) e cache longo para `/assets/*`;
-- o deploy é pulado quando nada mudou em `apps/medpuc`.
+- cabeçalhos de segurança (CSP, HSTS, X-Frame-Options, etc.) e cache longo para `/assets/*`.
+
+No Netlify, o build **falha de propósito** se `VITE_SUPABASE_URL`/`VITE_SUPABASE_PUBLISHABLE_KEY` estiverem ausentes
+ou se a chave for secreta, com a mensagem `[MedPUC] …` no log. Assim um site quebrado (ou com a chave secreta exposta)
+nunca chega a ser publicado.
 
 Passo a passo:
 
-1. Netlify → *Add new site* → *Import an existing project* → escolha este repositório. Os campos de build já vêm do
-   `netlify.toml`; não precisa alterá-los.
-2. *Site configuration → Environment variables*: crie `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` com os
-   valores do projeto Supabase de produção.
-3. *Deploy site*. Depois, copie o endereço final para *Site URL* e *Redirect URLs* do Supabase (passo 3 acima).
-4. Teste no endereço publicado: cadastro (o e-mail precisa chegar), login, criação de uma prova e de uma anotação.
+1. **Antes**: tenha o projeto Supabase de produção pronto (seção anterior), com as migrations aplicadas.
+2. Netlify → *Add new project* → *Import an existing project* → GitHub → escolha este repositório e o branch `main`.
+3. Na tela de configuração do build:
+   - o repositório é um monorepo (também contém o app Vence). Se o Netlify perguntar qual projeto publicar ou mostrar
+     o campo *Base directory*, informe **`apps/medpuc`**;
+   - os demais campos vêm do `netlify.toml` (*Build command* `npm run build`, *Publish directory* `dist`); deixe-os
+     como estão.
+4. Ainda nessa tela (ou depois, em *Project configuration → Environment variables*), crie:
+   - `VITE_SUPABASE_URL` = `https://<projeto>.supabase.co`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` = a chave **publishable** (`sb_publishable_…`) ou a `anon` legada.
+   Não defina `NODE_ENV=production` nas variáveis: o build precisa das devDependencies (Vite, TypeScript).
+5. *Deploy*. Se o log mostrar `[MedPUC] …`, corrija a variável indicada e use *Retry deploy*.
+6. Copie o endereço publicado (ex.: `https://medpuc.netlify.app`) para *Site URL* e *Redirect URLs* do Supabase
+   (`https://medpuc.netlify.app/**`). Para que cadastro e recuperação de senha funcionem também nos *Deploy Previews*,
+   acrescente `https://**--medpuc.netlify.app/**` (troque `medpuc` pelo nome do seu projeto no Netlify).
+7. Teste no endereço publicado: cadastro (o e-mail de confirmação precisa chegar), login, criação de uma prova, uma
+   anotação (recarregue a página e confira que continua lá) e uma rota direta como `/app/calendario`.
 
-Se usar domínio próprio no Supabase (custom domain), acrescente-o em `connect-src` na CSP do `netlify.toml`.
+Observações:
+
+- Os *Deploy Previews* de pull requests usam as mesmas variáveis e, portanto, o mesmo banco de produção. Se preferir
+  isolar, crie um segundo projeto Supabase e defina as variáveis com escopo *Deploy Previews* no Netlify.
+- Com domínio próprio no Netlify, inclua-o também nas *Redirect URLs* do Supabase.
+- Se usar domínio próprio no Supabase (custom domain), acrescente-o em `connect-src` na CSP do `netlify.toml`.
 
 ---
 
@@ -241,7 +260,7 @@ rodar contra um endereço que não seja `127.0.0.1`/`localhost`.
 | 9. Dados após recarregar | E2E `fluxos` e `autenticacao` |
 | 10. Isolamento entre dois usuários | pgTAP (56 verificações), API (24 testes) e E2E `isolamento` |
 | 11. Telas de celular | E2E `celular` (390×844: navegação inferior, sem rolagem horizontal, criação de evento) |
-| 12. Build de produção | `npm run build`; também simulado com clone limpo + `npm ci` |
+| 12. Build de produção | `npm run build`; também com clone limpo + `npm ci` + `netlify build` (CLI oficial), e a suíte E2E rodada contra esse build com as regras do `netlify.toml` |
 
 Também há testes de administração de modelos (importação em lote e cópia para o aluno) e de perfil/exclusão de conta.
 

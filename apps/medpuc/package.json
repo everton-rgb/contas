@@ -1,0 +1,59 @@
+{
+  "name": "medpuc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Organização acadêmica para estudantes de Medicina da PUCPR.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:api": "vitest run --config vitest.api.config.ts",
+    "test:e2e": "playwright test",
+    "test:db": "npx --yes supabase@2.121.0 test db",
+    "test:tudo": "npm run typecheck && npm test && npm run test:db && npm run test:api && npm run test:e2e",
+    "supabase": "npx --yes supabase@2.121.0",
+    "db:start": "npx --yes supabase@2.121.0 start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,storage-api,postgres-meta,supavisor",
+    "db:stop": "npx --yes supabase@2.121.0 stop",
+    "db:reset": "npx --yes supabase@2.121.0 db reset",
+    "db:types": "npx --yes supabase@2.121.0 gen types typescript --local > src/tipos/banco.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.2.9",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@supabase/supabase-js": "^2.118.0",
+    "@tanstack/react-query": "^5.104.0",
+    "@tiptap/extension-list": "^3.31.4",
+    "@tiptap/extension-placeholder": "^3.31.4",
+    "@tiptap/pm": "^3.31.4",
+    "@tiptap/react": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^1.48.0",
+    "react": "^19.2.9",
+    "react-dom": "^19.2.9",
+    "react-router": "^7.18.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^22.19.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "jsdom": "^27.4.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.7",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

@@ -2,7 +2,7 @@
   "name": "vence",
   "private": true,
   "workspaces": [
-    "apps/*",
+    "apps/mobile",
     "packages/*"
   ],
   "scripts": {

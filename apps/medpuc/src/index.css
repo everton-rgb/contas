@@ -1,0 +1,89 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Fraunces Variable', ui-serif, Georgia, serif;
+
+  /* Bordô institucional */
+  --color-vinho-50: #fbf4f6;
+  --color-vinho-100: #f6e5ea;
+  --color-vinho-200: #ecc7d1;
+  --color-vinho-300: #db9bad;
+  --color-vinho-400: #c2667f;
+  --color-vinho-500: #a63c5a;
+  --color-vinho-600: #8c1d40;
+  --color-vinho-700: #761735;
+  --color-vinho-800: #60132c;
+  --color-vinho-900: #4b1124;
+  --color-vinho-950: #2c0814;
+
+  /* Fundo levemente quente */
+  --color-papel: #faf8f7;
+
+  --shadow-cartao: 0 1px 2px rgb(28 25 23 / 0.04), 0 1px 3px rgb(28 25 23 / 0.06);
+  --shadow-flutuante: 0 10px 30px -10px rgb(28 25 23 / 0.25), 0 4px 10px -4px rgb(28 25 23 / 0.1);
+
+  --animate-surgir: surgir 160ms ease-out;
+  --animate-deslizar: deslizar 200ms ease-out;
+
+  @keyframes surgir {
+    from { opacity: 0; transform: translateY(4px) scale(0.99); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes deslizar {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-papel font-sans text-stone-800 antialiased;
+  }
+  h1, h2, h3 {
+    @apply text-stone-900;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-vinho-500;
+  }
+  ::selection {
+    @apply bg-vinho-100 text-vinho-900;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Editor de anotações (TipTap) ─────────────────────────────────────── */
+
+.editor-anotacao .tiptap {
+  @apply min-h-[50vh] outline-none text-[15px] leading-7 text-stone-800;
+}
+.editor-anotacao .tiptap > * + * { @apply mt-3; }
+.editor-anotacao .tiptap h1 { @apply font-serif text-2xl font-semibold mt-6; }
+.editor-anotacao .tiptap h2 { @apply font-serif text-xl font-semibold mt-5; }
+.editor-anotacao .tiptap h3 { @apply text-base font-semibold mt-4; }
+.editor-anotacao .tiptap ul:not([data-type='taskList']) { @apply list-disc pl-6; }
+.editor-anotacao .tiptap ol { @apply list-decimal pl-6; }
+.editor-anotacao .tiptap li > p { @apply m-0; }
+.editor-anotacao .tiptap blockquote { @apply border-l-4 border-vinho-200 pl-4 text-stone-600 italic; }
+.editor-anotacao .tiptap code { @apply rounded bg-stone-100 px-1 py-0.5 text-[13px]; }
+.editor-anotacao .tiptap hr { @apply my-6 border-stone-200; }
+.editor-anotacao .tiptap ul[data-type='taskList'] { @apply pl-1; }
+.editor-anotacao .tiptap ul[data-type='taskList'] li { @apply flex items-start gap-2; }
+.editor-anotacao .tiptap ul[data-type='taskList'] li > label { @apply mt-1.5 select-none; }
+.editor-anotacao .tiptap ul[data-type='taskList'] li > label input { @apply size-4 accent-vinho-600 cursor-pointer; }
+.editor-anotacao .tiptap ul[data-type='taskList'] li > div { @apply flex-1; }
+.editor-anotacao .tiptap ul[data-type='taskList'] li[data-checked='true'] > div { @apply text-stone-400 line-through; }
+.editor-anotacao .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-stone-400;
+}

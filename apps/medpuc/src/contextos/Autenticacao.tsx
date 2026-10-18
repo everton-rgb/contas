@@ -14,41 +14,29 @@ type EstadoAutenticacao = {
   carregando: boolean;
   sessao: Session | null;
   usuario: User | null;
-  /** Entrou pelo link de redefinição de senha. */
-  emRecuperacao: boolean;
 };
 
 const ContextoAutenticacao = createContext<EstadoAutenticacao | null>(null);
 
 export function ProvedorAutenticacao({ children }: { children: ReactNode }) {
   const clienteConsultas = useQueryClient();
-  const [estado, setEstado] = useState<EstadoAutenticacao>({
-    carregando: true,
-    sessao: null,
-    usuario: null,
-    emRecuperacao: false,
-  });
+  const [estado, setEstado] = useState<EstadoAutenticacao>({ carregando: true, sessao: null, usuario: null });
   const usuarioAtual = useRef<string | null>(null);
 
   useEffect(() => {
     let ativo = true;
 
-    function aplicar(sessao: Session | null, evento?: string) {
+    function aplicar(sessao: Session | null) {
       const novoId = sessao?.user.id ?? null;
       if (usuarioAtual.current !== novoId) {
         clienteConsultas.clear();
         usuarioAtual.current = novoId;
       }
-      setEstado((anterior) => ({
-        carregando: false,
-        sessao,
-        usuario: sessao?.user ?? null,
-        emRecuperacao: evento === 'PASSWORD_RECOVERY' ? true : sessao ? anterior.emRecuperacao : false,
-      }));
+      setEstado({ carregando: false, sessao, usuario: sessao?.user ?? null });
     }
 
-    const cancelar = observarSessao((evento, sessao) => {
-      if (ativo) aplicar(sessao, evento);
+    const cancelar = observarSessao((_evento, sessao) => {
+      if (ativo) aplicar(sessao);
     });
 
     obterSessao()
@@ -79,7 +67,7 @@ export function useUsuario(): User {
 
 export function ProvedorAutenticacaoTeste({ valor, children }: { valor: Partial<EstadoAutenticacao>; children: ReactNode }) {
   const estado = useMemo<EstadoAutenticacao>(
-    () => ({ carregando: false, sessao: null, usuario: null, emRecuperacao: false, ...valor }),
+    () => ({ carregando: false, sessao: null, usuario: null, ...valor }),
     [valor],
   );
   return <ContextoAutenticacao.Provider value={estado}>{children}</ContextoAutenticacao.Provider>;

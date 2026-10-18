@@ -29,9 +29,9 @@ export async function verificarAdmin(): Promise<boolean> {
   return Boolean(await resolver(supabase().rpc('eh_admin')));
 }
 
+/** Apaga o usuário e, em cascata, todos os dados dele. A sessão local fica para quem chamou encerrar. */
 export async function excluirMinhaConta(): Promise<void> {
   await resolver(supabase().rpc('excluir_minha_conta'));
-  await supabase().auth.signOut({ scope: 'local' });
 }
 
 export async function listarPlanosDisponiveis(): Promise<Plano[]> {

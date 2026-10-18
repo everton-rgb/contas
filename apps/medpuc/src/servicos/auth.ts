@@ -63,6 +63,11 @@ export async function sair(): Promise<void> {
   if (error) await supabase().auth.signOut({ scope: 'local' });
 }
 
+/** Descarta só a sessão deste navegador (a conta já não existe no servidor). */
+export async function encerrarSessaoLocal(): Promise<void> {
+  await supabase().auth.signOut({ scope: 'local' });
+}
+
 export async function solicitarRedefinicaoSenha(email: string): Promise<void> {
   await executar(() =>
     supabase().auth.resetPasswordForEmail(email.trim().toLowerCase(), {

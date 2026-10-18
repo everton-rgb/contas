@@ -12,7 +12,7 @@ import { limiteDe, useAtualizarPerfil, useMeuPlano, usePerfil, useUso } from '..
 import { useTituloPagina } from '../../hooks/useUtilitarios';
 import { traduzirErro } from '../../lib/erros';
 import { obrigatorio, primeiro, senhaValida, tamanhoMaximo } from '../../lib/validacao';
-import { definirNovaSenha, sair } from '../../servicos/auth';
+import { definirNovaSenha, encerrarSessaoLocal, sair } from '../../servicos/auth';
 import { excluirMinhaConta } from '../../servicos/perfil';
 
 const RECURSOS = [
@@ -195,7 +195,11 @@ function ExcluirConta() {
     setExcluindo(true);
     try {
       await excluirMinhaConta();
+      // Sai da área privada antes de encerrar a sessão, senão a guarda de
+      // rota redirecionaria para o login.
       navegar('/', { replace: true });
+      await encerrarSessaoLocal();
+      avisos.sucesso('Sua conta e todos os seus dados foram excluídos.');
     } catch (erro) {
       avisos.erro(traduzirErro(erro));
       setExcluindo(false);

@@ -197,7 +197,9 @@ password_requirements = "letters_digits"
 
 [auth.rate_limit]
 # Number of emails that can be sent per hour. Requires auth.email.smtp to be enabled.
-email_sent = 2
+# Ambiente local: alto para os testes E2E, que enviam vários e-mails. Em produção,
+# o limite é configurado no painel do Supabase junto com o SMTP.
+email_sent = 100
 # Number of SMS messages that can be sent per hour. Requires auth.sms to be enabled.
 sms_sent = 30
 # Number of anonymous sign-ins that can be made per hour per IP address. Requires enable_anonymous_sign_ins = true.
@@ -205,7 +207,7 @@ anonymous_users = 30
 # Number of sessions that can be refreshed in a 5 minute interval per IP address.
 token_refresh = 150
 # Number of sign up and sign-in requests that can be made in a 5 minute interval per IP address (excludes anonymous users).
-sign_in_sign_ups = 30
+sign_in_sign_ups = 300
 # Number of OTP / Magic link verifications that can be made in a 5 minute interval per IP address.
 token_verifications = 30
 # Number of Web3 logins that can be made in a 5 minute interval per IP address.
@@ -244,7 +246,20 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
-# Uncomment to customize email template
+# Modelos de e-mail em português. Em produção, copie o conteúdo destes arquivos
+# para Authentication → Emails → Templates no painel do Supabase.
+[auth.email.template.confirmation]
+subject = "Confirme seu e-mail no MedPUC"
+content_path = "./supabase/templates/confirmacao.html"
+
+[auth.email.template.recovery]
+subject = "Redefinição de senha do MedPUC"
+content_path = "./supabase/templates/recuperacao.html"
+
+[auth.email.template.email_change]
+subject = "Confirme seu novo e-mail no MedPUC"
+content_path = "./supabase/templates/troca-email.html"
+
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"

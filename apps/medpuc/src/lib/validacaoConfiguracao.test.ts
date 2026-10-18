@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validarConfiguracao } from './configuracao';
+import { validarConfiguracao } from './validacaoConfiguracao';
 
 function jwt(carga: object) {
   const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');

@@ -210,6 +210,9 @@ export function Inicio() {
             e conteúdos são cadastrados por cada estudante.
           </p>
         </div>
+        <p className="mx-auto mt-8 max-w-6xl px-4 text-center text-xs text-stone-500 sm:px-6">
+          Criado por Giovana Borguezani
+        </p>
       </footer>
     </div>
   );

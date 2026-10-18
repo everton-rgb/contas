@@ -11,11 +11,6 @@ function normalizar(dados: Partial<DadosConteudo>) {
   };
 }
 
-export async function listarConteudosDaDisciplina(disciplinaId: string): Promise<Conteudo[]> {
-  return resolver(
-    supabase().from('conteudos').select('*').eq('disciplina_id', disciplinaId).order('ordem').order('created_at'),
-  );
-}
 
 /** Todos os conteúdos do aluno, para calcular progresso e o calendário. */
 export async function listarTodosConteudos(): Promise<Conteudo[]> {

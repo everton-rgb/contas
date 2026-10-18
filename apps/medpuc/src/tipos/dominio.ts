@@ -104,14 +104,7 @@ export function corDoTipo(tipo: TipoEvento): string {
   return TIPOS_EVENTO.find((t) => t.valor === tipo)?.cor ?? '#78716C';
 }
 
-export function rotuloStatusConteudo(status: StatusConteudo): string {
-  return STATUS_CONTEUDO.find((s) => s.valor === status)?.rotulo ?? status;
-}
 
 export function rotuloPrioridade(prioridade: PrioridadeTarefa): string {
   return PRIORIDADES.find((p) => p.valor === prioridade)?.rotulo ?? prioridade;
-}
-
-export function rotuloStatusTarefa(status: StatusTarefa): string {
-  return STATUS_TAREFA.find((s) => s.valor === status)?.rotulo ?? status;
 }

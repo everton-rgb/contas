@@ -51,7 +51,7 @@ export function ListaTarefas({ disciplinaId }: { disciplinaId?: string }) {
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <div role="tablist" aria-label="Filtrar por status" className="inline-flex rounded-lg bg-stone-100 p-1">
+        <div role="group" aria-label="Filtrar por status" className="inline-flex rounded-lg bg-stone-100 p-1">
           {(
             [
               ['pendentes', 'Pendentes'],
@@ -62,8 +62,7 @@ export function ListaTarefas({ disciplinaId }: { disciplinaId?: string }) {
             <button
               key={valor}
               type="button"
-              role="tab"
-              aria-selected={status === valor}
+              aria-pressed={status === valor}
               onClick={() => setStatus(valor)}
               className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                 status === valor ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-800'

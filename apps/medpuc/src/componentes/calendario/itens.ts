@@ -5,7 +5,6 @@
  */
 
 import { horarioDoEvento, corDoEvento } from '../eventos/ItemEvento';
-import { formatarHora } from '../../lib/datas';
 import { rotuloTipo, type Conteudo, type Disciplina, type Evento, type Tarefa, type TipoEvento } from '../../tipos/dominio';
 
 export type ItemCalendario =
@@ -101,9 +100,4 @@ export function agruparPorDia(itens: ItemCalendario[]): Map<string, ItemCalendar
     mapa.set(item.data, lista);
   }
   return mapa;
-}
-
-export function rotuloItem(item: ItemCalendario): string {
-  const hora = item.hora ? `${formatarHora(item.hora)} ` : '';
-  return `${hora}${item.titulo}`;
 }

@@ -33,7 +33,7 @@ function Envolver({
     <div className={className}>
       <label htmlFor={id} className="mb-1.5 flex items-baseline gap-1.5 text-sm font-medium text-stone-700">
         {rotulo}
-        {opcional && <span className="text-xs font-normal text-stone-400">(opcional)</span>}
+        {opcional && <span className="text-xs font-normal text-stone-500">(opcional)</span>}
       </label>
       {children}
       {erro ? (

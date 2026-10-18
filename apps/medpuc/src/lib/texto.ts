@@ -3,9 +3,6 @@ export function normalizar(texto: string): string {
   return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 }
 
-export function contem(texto: string, termo: string): boolean {
-  return normalizar(texto).includes(normalizar(termo));
-}
 
 /** plural(1, 'tarefa', 'tarefas') → '1 tarefa' */
 export function plural(n: number, singular: string, pluralForma: string): string {

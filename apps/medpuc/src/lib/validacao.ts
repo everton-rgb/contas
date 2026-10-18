@@ -8,8 +8,6 @@
 import { corValida } from './cores';
 import { isoValida } from './datas';
 
-export type Erros<T> = Partial<Record<keyof T, string>>;
-
 export function obrigatorio(valor: string | null | undefined, rotulo = 'Este campo'): string | undefined {
   return valor && valor.trim() ? undefined : `${rotulo} é obrigatório.`;
 }
@@ -53,8 +51,4 @@ export function corObrigatoria(cor: string | null | undefined): string | undefin
 /** Primeiro erro definido entre os validadores. */
 export function primeiro(...erros: (string | undefined)[]): string | undefined {
   return erros.find(Boolean);
-}
-
-export function semErros<T>(erros: Erros<T>): boolean {
-  return Object.values(erros).every((e) => !e);
 }

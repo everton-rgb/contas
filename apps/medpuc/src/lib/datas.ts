@@ -11,7 +11,6 @@ import {
   addMonths,
   addWeeks,
   differenceInCalendarDays,
-  endOfMonth,
   endOfWeek,
   format,
   isValid,
@@ -41,9 +40,6 @@ export function hojeISO(agora = new Date()): string {
   return paraISO(agora);
 }
 
-export function somarDiasISO(iso: string, dias: number): string {
-  return paraISO(addDays(deISO(iso), dias));
-}
 
 /** "14:30:00" → "14:30" */
 export function formatarHora(hora: string | null | undefined): string {
@@ -152,8 +148,5 @@ export function mesmoMes(iso: string, referencia: Date): boolean {
   return iso.slice(0, 7) === paraISO(referencia).slice(0, 7);
 }
 
-export function fimDoMesISO(referencia: Date): string {
-  return paraISO(endOfMonth(referencia));
-}
 
 export const NOMES_DIAS_CURTOS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];

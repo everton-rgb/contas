@@ -113,7 +113,7 @@ export function ListaAnotacoes({ disciplinaId }: { disciplinaId?: string }) {
                 >
                   <span className="line-clamp-1 font-semibold text-stone-900">{a.titulo}</span>
                   <span className="mt-1 line-clamp-2 min-h-10 text-sm text-stone-500">{a.trecho || 'Sem conteúdo ainda.'}</span>
-                  <span className="mt-3 flex flex-wrap items-center gap-2 text-xs text-stone-400">
+                  <span className="mt-3 flex flex-wrap items-center gap-2 text-xs text-stone-500">
                     {!disciplinaId && (d ? <Etiqueta cor={d.cor}>{d.nome}</Etiqueta> : <Etiqueta>Geral</Etiqueta>)}
                     <span>Atualizada {quando(a.updated_at)}</span>
                   </span>

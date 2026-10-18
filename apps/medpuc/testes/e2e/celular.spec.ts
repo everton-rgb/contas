@@ -53,7 +53,7 @@ test('uso no celular: navegação inferior, calendário e formulário', async ({
   await expect(dialogo).toBeHidden();
 
   // No mês, o celular mostra pontos; tocar no dia abre a visão diária.
-  const celula = page.locator(`[role="gridcell"][data-data="${data}"]`);
+  const celula = page.locator(`[role="group"][data-data="${data}"]`);
   await celula.getByRole('button', { name: /1 compromisso/ }).tap();
   await expect(page).toHaveURL(/vista=dia/);
   await expect(page.getByText('Avaliação prática — marcha')).toBeVisible();

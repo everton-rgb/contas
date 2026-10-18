@@ -114,13 +114,12 @@ export function Calendario() {
               <ChevronRight aria-hidden className="size-4" />
             </BotaoIcone>
           </div>
-          <div role="tablist" aria-label="Visualização" className="inline-flex rounded-lg bg-stone-100 p-1">
+          <div role="group" aria-label="Visualização" className="inline-flex rounded-lg bg-stone-100 p-1">
             {VISTAS.map((v) => (
               <button
                 key={v.valor}
                 type="button"
-                role="tab"
-                aria-selected={vista === v.valor}
+                aria-pressed={vista === v.valor}
                 onClick={() => atualizar(v.valor, referencia)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   vista === v.valor ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-800'
@@ -150,7 +149,7 @@ export function Calendario() {
           <div>
             <p className="mb-2 text-xs font-semibold tracking-wide text-stone-500 uppercase">Disciplinas</p>
             <div className="flex flex-wrap gap-2">
-              {disciplinas.length === 0 && <p className="text-sm text-stone-400">Nenhuma disciplina cadastrada.</p>}
+              {disciplinas.length === 0 && <p className="text-sm text-stone-500">Nenhuma disciplina cadastrada.</p>}
               {disciplinas.map((d) => {
                 const ativa = filtros.disciplinas.has(d.id);
                 return (

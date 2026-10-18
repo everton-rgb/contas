@@ -49,14 +49,14 @@ export function CartaoDisciplina({ disciplina, proximaAvaliacao, pendentes, prog
                   {formatarData(proximaAvaliacao.data)} · {descreverDistancia(proximaAvaliacao.data)}
                 </>
               ) : (
-                <span className="text-stone-400">Nenhuma avaliação agendada</span>
+                <span className="text-stone-500">Nenhuma avaliação agendada</span>
               )}
             </dd>
           </div>
           <div className="flex items-center gap-2">
             <dt className="sr-only">Tarefas pendentes</dt>
             <ListChecks aria-hidden className="size-4 shrink-0 text-stone-400" />
-            <dd className={pendentes ? 'text-stone-600' : 'text-stone-400'}>
+            <dd className={pendentes ? 'text-stone-600' : 'text-stone-500'}>
               {pendentes ? plural(pendentes, 'tarefa pendente', 'tarefas pendentes') : 'Sem tarefas pendentes'}
             </dd>
           </div>

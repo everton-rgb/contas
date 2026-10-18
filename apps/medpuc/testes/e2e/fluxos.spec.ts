@@ -59,7 +59,7 @@ test('prova cadastrada na disciplina aparece no calendário e no painel, sem dup
 
   // Calendário mensal: uma única ocorrência, na data certa.
   await page.goto(`/app/calendario?vista=mes&data=${data}`);
-  const celula = page.locator(`[role="gridcell"][data-data="${data}"]`);
+  const celula = page.locator(`[role="group"][data-data="${data}"]`);
   await expect(celula.getByRole('button', { name: /Prova 1 — Tronco encefálico/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /Prova 1 — Tronco encefálico/ })).toHaveCount(1);
 
@@ -159,7 +159,7 @@ test('tarefa é criada, concluída e continua concluída após recarregar', asyn
 
   await page.reload();
   await expect(page.getByText('Nenhuma tarefa por aqui')).toBeVisible();
-  await page.getByRole('tab', { name: 'Concluídas' }).click();
+  await page.getByRole('button', { name: 'Concluídas' }).click();
   await expect(page.getByRole('checkbox', { name: /Reabrir "Lista de exercícios de neurofisiologia"/ })).toHaveAttribute(
     'aria-checked',
     'true',

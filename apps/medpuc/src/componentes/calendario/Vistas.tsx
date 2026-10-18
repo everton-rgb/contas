@@ -36,7 +36,7 @@ export function VistaMes({ referencia, porDia, aoAbrir, aoNovo, aoIrParaDia }: P
           </div>
         ))}
       </div>
-      <div role="grid" aria-label="Calendário do mês" className="grid grid-cols-7">
+      <div aria-label="Calendário do mês" role="region" className="grid grid-cols-7">
         {dias.map((dia, i) => {
           const itens = porDia.get(dia) ?? [];
           const foraDoMes = !mesmoMes(dia, referencia);
@@ -45,7 +45,7 @@ export function VistaMes({ referencia, porDia, aoAbrir, aoNovo, aoIrParaDia }: P
           return (
             <div
               key={dia}
-              role="gridcell"
+              role="group"
               data-data={dia}
               aria-label={`${formatarData(dia, "EEEE, d 'de' MMMM")}${itens.length ? `, ${itens.length} compromisso(s)` : ''}`}
               className={`group relative min-h-16 border-stone-100 p-1 sm:min-h-28 sm:p-1.5 ${i % 7 !== 6 ? 'border-r' : ''} ${
@@ -61,7 +61,7 @@ export function VistaMes({ referencia, porDia, aoAbrir, aoNovo, aoIrParaDia }: P
                     ehHoje
                       ? 'bg-vinho-600 text-white'
                       : foraDoMes
-                        ? 'text-stone-400 hover:bg-stone-100'
+                        ? 'text-stone-500 hover:bg-stone-100'
                         : 'text-stone-700 hover:bg-stone-100'
                   }`}
                 >
@@ -151,7 +151,7 @@ export function VistaSemana({ referencia, porDia, aoAbrir, aoNovo, aoIrParaDia }
               {itens.length ? (
                 itens.map((item) => <LinhaItem key={`${item.tipo}-${item.id}`} item={item} aoAbrir={aoAbrir} />)
               ) : (
-                <p className="px-1 pb-1 text-xs text-stone-400">Livre</p>
+                <p className="px-1 pb-1 text-xs text-stone-500">Livre</p>
               )}
             </div>
           </section>
@@ -178,7 +178,7 @@ export function VistaDia({ referencia, porDia, aoAbrir, aoNovo }: Omit<PropsVist
           {semHorario.length ? (
             semHorario.map((item) => <LinhaItem key={`${item.tipo}-${item.id}`} item={item} aoAbrir={aoAbrir} />)
           ) : (
-            <p className="pt-2 text-xs text-stone-400">Nenhum compromisso sem horário.</p>
+            <p className="pt-2 text-xs text-stone-500">Nenhum compromisso sem horário.</p>
           )}
         </div>
       </div>
@@ -188,7 +188,7 @@ export function VistaDia({ referencia, porDia, aoAbrir, aoNovo }: Omit<PropsVist
           const rotulo = `${String(hora).padStart(2, '0')}:00`;
           return (
             <li key={hora} className="group flex min-h-12 items-start gap-3 border-b border-stone-50 px-3 py-1.5 last:border-b-0">
-              <span className="w-14 shrink-0 pt-1.5 text-right text-xs text-stone-400 tabular-nums">{rotulo}</span>
+              <span className="w-14 shrink-0 pt-1.5 text-right text-xs text-stone-500 tabular-nums">{rotulo}</span>
               <div className="flex-1 space-y-1.5">
                 {daHora.map((item) => (
                   <LinhaItem key={`${item.tipo}-${item.id}`} item={item} aoAbrir={aoAbrir} />

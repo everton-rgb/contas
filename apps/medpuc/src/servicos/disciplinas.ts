@@ -17,9 +17,6 @@ export async function listarDisciplinas(): Promise<Disciplina[]> {
   );
 }
 
-export async function obterDisciplina(id: string): Promise<Disciplina | null> {
-  return resolver(supabase().from('disciplinas').select('*').eq('id', id).maybeSingle());
-}
 
 export async function criarDisciplina(dados: DadosDisciplina, ordem: number): Promise<Disciplina> {
   return resolver(

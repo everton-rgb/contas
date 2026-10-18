@@ -2,6 +2,10 @@
 
 App de controle de despesas com leitura de boletos. Lê, organiza e avisa — não paga.
 
+> Este repositório também abriga o **MedPUC** (`apps/medpuc`), app web de organização acadêmica para estudantes de
+> Medicina, independente do Vence: dependências, banco e deploy próprios. Documentação em
+> [`apps/medpuc/README.md`](apps/medpuc/README.md). O `netlify.toml` da raiz publica só o MedPUC.
+
 Especificação completa: [`docs/spec-boletos.md`](docs/spec-boletos.md).
 
 ## Testar no celular agora
@@ -55,6 +59,7 @@ Para build na nuvem, o `eas.json` traz os perfis `development`, `simulador`,
 ## Estrutura
 
 ```
+apps/medpuc/           MedPUC — React + Vite + Supabase (ver o README próprio)
 apps/mobile/           Expo SDK 57 (RN 0.86), Expo Router
   src/app/             rotas: index, entrar, capturar, conta/[id]
   src/lib/             db (dispatcher), db-local, db-supabase, notificacoes,

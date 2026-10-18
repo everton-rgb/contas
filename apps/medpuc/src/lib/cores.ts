@@ -10,8 +10,6 @@ export const PALETA_DISCIPLINAS = [
   '#5B7B2A', '#B45309', '#C2410C', '#A3367D', '#475569', '#78716C',
 ];
 
-export const COR_PADRAO = PALETA_DISCIPLINAS[0];
-
 export function corValida(cor: string | null | undefined): cor is string {
   return !!cor && /^#[0-9a-fA-F]{6}$/.test(cor);
 }
